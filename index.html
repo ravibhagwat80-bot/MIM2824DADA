@@ -1,0 +1,2651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0a0d14">
+<title>Master in Minutes™</title>
+<style>
+/* 
+   DESIGN SYSTEM
+ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;-webkit-tap-highlight-color:transparent;scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#080b12;color:#e8edf5;min-height:100vh;overflow-x:hidden}
+button{cursor:pointer;font-family:inherit;border:none;outline:none}
+input,textarea,select{font-family:inherit;outline:none;-webkit-appearance:none}
+a{text-decoration:none;color:inherit}
+img{max-width:100%}
+
+:root{
+  --bg:#080b12;--bg2:#0d1120;--bg3:#111827;
+  --card:#111827;--card2:#1a2236;--card3:#1e293b;
+  --border:#1e2d45;--border2:#263650;--border3:#2d4060;
+  --muted:#3d5070;--fog:#6b82a8;--sub:#8fa3c4;
+  --text:#e8edf5;--white:#f8faff;
+  --blue:#3b82f6;--blue2:#2563eb;--blue3:#1d4ed8;
+  --indigo:#6366f1;--violet:#8b5cf6;
+  --green:#22c55e;--green2:#16a34a;
+  --amber:#f59e0b;--amber2:#d97706;
+  --red:#ef4444;--red2:#dc2626;
+  --cyan:#06b6d4;--pink:#ec4899;
+  --gold:#fbbf24;
+  --grad:linear-gradient(135deg,#3b82f6,#6366f1);
+  --grad-gold:linear-gradient(135deg,#f59e0b,#ef4444);
+  --grad-green:linear-gradient(135deg,#22c55e,#06b6d4);
+  --grad-purple:linear-gradient(135deg,#8b5cf6,#ec4899);
+  --shadow:0 4px 24px rgba(0,0,0,.4);
+  --shadow-blue:0 4px 24px rgba(59,130,246,.2);
+}
+
+/* ── SCREENS ── */
+.screen{display:none;min-height:100vh;flex-direction:column;animation:fadeIn .3s ease}
+.screen.on{display:flex}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── TOPBAR ── */
+.topbar{position:sticky;top:0;z-index:200;background:rgba(8,11,18,.94);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);height:56px;display:flex;align-items:center;padding:0 16px;gap:10px;flex-shrink:0}
+.logo-text{font-size:17px;font-weight:800;letter-spacing:-.02em}
+.logo-text span{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.logo-tm{font-size:9px;vertical-align:super;color:var(--fog);-webkit-text-fill-color:var(--fog)}
+.topbar-title{font-size:15px;font-weight:700;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.topbar-sub{font-size:11px;color:var(--fog);margin-top:1px}
+.btn-back{width:36px;height:36px;border-radius:10px;background:var(--card2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;color:var(--text)}
+.topbar-right{display:flex;align-items:center;gap:8px;margin-left:auto}
+
+/* ── BOTTOM NAV ── */
+.bnav{position:fixed;bottom:0;left:0;right:0;z-index:200;background:rgba(8,11,18,.97);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:grid;padding-bottom:env(safe-area-inset-bottom,0)}
+.bnav-4{grid-template-columns:repeat(4,1fr)}
+.bnav-5{grid-template-columns:repeat(5,1fr)}
+.bnav-btn{display:flex;flex-direction:column;align-items:center;padding:8px 4px 6px;gap:2px;background:none;border:none;color:var(--fog);cursor:pointer;transition:color .15s;position:relative}
+.bnav-btn.on{color:var(--blue)}
+.bnav-icon{font-size:21px;line-height:1}
+.bnav-lbl{font-size:10px;font-weight:600;letter-spacing:.02em}
+.bnav-dot{position:absolute;top:6px;right:calc(50% - 14px);width:7px;height:7px;background:var(--red);border-radius:50%;border:2px solid var(--bg)}
+
+/* ── CONTENT ── */
+.content{flex:1;padding:16px;padding-bottom:84px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.content-nb{flex:1;padding:16px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+
+/* ── CARDS ── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px}
+.card2{background:var(--card2);border:1px solid var(--border2);border-radius:12px;padding:14px}
+.card3{background:var(--card3);border:1px solid var(--border3);border-radius:10px;padding:12px}
+.card-glow{box-shadow:0 0 30px rgba(59,130,246,.12)}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:13px 20px;border-radius:13px;font-size:14px;font-weight:700;cursor:pointer;border:none;font-family:inherit;transition:all .15s;white-space:nowrap;text-align:center;line-height:1}
+.btn:active{transform:scale(.96)}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.btn-primary{background:var(--grad);color:#fff;box-shadow:var(--shadow-blue)}
+.btn-primary:hover{opacity:.9}
+.btn-secondary{background:var(--card2);border:1.5px solid var(--border2);color:var(--text)}
+.btn-secondary:hover{border-color:var(--blue)}
+.btn-green{background:var(--grad-green);color:#fff}
+.btn-gold{background:var(--grad-gold);color:#fff}
+.btn-ghost{background:transparent;border:1.5px solid var(--border2);color:var(--fog)}
+.btn-full{width:100%}
+.btn-sm{padding:8px 14px;font-size:13px;border-radius:10px}
+.btn-xs{padding:6px 10px;font-size:12px;border-radius:8px}
+.btn-icon{width:42px;height:42px;padding:0;border-radius:12px;font-size:18px;flex-shrink:0}
+
+/* ── INPUTS ── */
+.inp{width:100%;background:var(--card2);border:1.5px solid var(--border2);border-radius:13px;padding:13px 15px;color:var(--text);font-size:14px;transition:all .2s}
+.inp:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(59,130,246,.1)}
+.inp::placeholder{color:var(--muted)}
+.inp-label{font-size:12px;font-weight:700;color:var(--fog);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em}
+.sel{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M5 6L0 0h10z' fill='%236b82a8'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:100px;font-size:11px;font-weight:700;letter-spacing:.02em}
+.b-blue{background:rgba(59,130,246,.15);color:#93c5fd;border:1px solid rgba(59,130,246,.25)}
+.b-green{background:rgba(34,197,94,.12);color:#86efac;border:1px solid rgba(34,197,94,.2)}
+.b-amber{background:rgba(245,158,11,.12);color:#fcd34d;border:1px solid rgba(245,158,11,.2)}
+.b-red{background:rgba(239,68,68,.12);color:#fca5a5;border:1px solid rgba(239,68,68,.2)}
+.b-violet{background:rgba(139,92,246,.12);color:#c4b5fd;border:1px solid rgba(139,92,246,.2)}
+.b-gold{background:rgba(251,191,36,.12);color:#fde68a;border:1px solid rgba(251,191,36,.2)}
+.b-cyan{background:rgba(6,182,212,.12);color:#67e8f9;border:1px solid rgba(6,182,212,.2)}
+
+/* ── TYPOGRAPHY ── */
+.h1{font-size:26px;font-weight:800;line-height:1.2;letter-spacing:-.03em}
+.h2{font-size:21px;font-weight:800;line-height:1.25;letter-spacing:-.02em}
+.h3{font-size:16px;font-weight:700;line-height:1.3}
+.h4{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--fog)}
+.sm{font-size:13px}.xs{font-size:11px}
+.fog{color:var(--fog)}.sub{color:var(--sub)}.g{color:var(--green)}.bl{color:var(--blue)}.am{color:var(--amber)}.rd{color:var(--red)}.wh{color:var(--white)}
+.bold{font-weight:700}.bolder{font-weight:800}
+.grad{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.grad-gold{background:var(--grad-gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.center-text{text-align:center}
+.lh{line-height:1.7}
+
+/* ── SPACING ── */
+.mb4{margin-bottom:4px}.mb6{margin-bottom:6px}.mb8{margin-bottom:8px}.mb10{margin-bottom:10px}.mb12{margin-bottom:12px}.mb14{margin-bottom:14px}.mb16{margin-bottom:16px}.mb20{margin-bottom:20px}.mb24{margin-bottom:24px}.mb32{margin-bottom:32px}
+.mt4{margin-top:4px}.mt8{margin-top:8px}.mt12{margin-top:12px}.mt16{margin-top:16px}.mt20{margin-top:20px}
+.p8{padding:8px}.p12{padding:12px}.p16{padding:16px}.p20{padding:20px}
+
+/* ── FLEX / GRID ── */
+.row{display:flex;align-items:center}.col{display:flex;flex-direction:column}
+.between{justify-content:space-between}.jcenter{justify-content:center}.acenter{align-items:center}
+.f1{flex:1}.wrap{flex-wrap:wrap}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.gap4{gap:4px}.gap6{gap:6px}.gap8{gap:8px}.gap10{gap:10px}.gap12{gap:12px}.gap16{gap:16px}
+
+/* ── PROGRESS ── */
+.prog{height:6px;background:var(--card2);border-radius:99px;overflow:hidden}
+.prog-fill{height:100%;border-radius:99px;background:var(--grad);transition:width .6s cubic-bezier(.4,0,.2,1)}
+.prog-gold{background:var(--grad-gold)}
+.prog-green{background:var(--grad-green)}
+
+/* ── SPINNER ── */
+.spin{width:20px;height:20px;border:2.5px solid var(--border2);border-top-color:var(--blue);border-radius:50%;animation:_spin .7s linear infinite;flex-shrink:0}
+@keyframes _spin{to{transform:rotate(360deg)}}
+.loading-state{display:flex;align-items:center;gap:12px;padding:28px 16px;color:var(--fog);font-size:14px}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.pulse{animation:pulse 1.5s ease infinite}
+
+/* ── FLASHCARD ── */
+.fc-wrap{perspective:1000px;cursor:pointer;user-select:none;min-height:220px;margin-bottom:16px}
+.fc-inner{position:relative;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.4,0,.2,1);min-height:220px}
+.fc-wrap.flipped .fc-inner{transform:rotateY(180deg)}
+.fc-front,.fc-back{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;min-height:220px}
+.fc-front{background:linear-gradient(145deg,#1a3060,#142445);border:1px solid rgba(59,130,246,.3)}
+.fc-back{background:linear-gradient(145deg,#1a3a28,#122218);border:1px solid rgba(34,197,94,.3);transform:rotateY(180deg)}
+
+/* ── QUIZ OPTIONS ── */
+.qopt{display:flex;align-items:center;gap:12px;padding:15px 16px;background:var(--card2);border:1.5px solid var(--border2);border-radius:13px;cursor:pointer;text-align:left;width:100%;font-size:14px;color:var(--text);font-weight:500;transition:all .15s;margin-bottom:9px}
+.qopt:hover:not(:disabled){border-color:var(--blue);background:rgba(59,130,246,.06)}
+.qopt.correct{background:rgba(34,197,94,.1);border-color:var(--green)}
+.qopt.wrong{background:rgba(239,68,68,.1);border-color:var(--red)}
+.qopt:disabled{cursor:not-allowed}
+.qdot{width:28px;height:28px;border-radius:50%;border:2px solid var(--border2);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;transition:all .2s}
+.qopt.correct .qdot{background:rgba(34,197,94,.2);border-color:var(--green);color:var(--green)}
+.qopt.wrong .qdot{background:rgba(239,68,68,.2);border-color:var(--red);color:var(--red)}
+
+/* ── CHAT ── */
+.chat-area{display:flex;flex-direction:column;gap:12px;padding:14px 16px 80px}
+.msg{display:flex;gap:8px;animation:fadeIn .25s ease}
+.msg.user{flex-direction:row-reverse}
+.bubble{padding:11px 15px;border-radius:16px;font-size:14px;line-height:1.65;max-width:86%}
+.msg.ai .bubble{background:var(--card2);border:1px solid var(--border2);border-radius:16px 16px 16px 4px}
+.msg.user .bubble{background:var(--blue);color:#fff;border-radius:16px 16px 4px 16px}
+.av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;margin-top:2px}
+.av-ai{background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.3)}
+.av-u{background:var(--blue);font-size:12px;font-weight:800;color:#fff}
+.chat-inp-wrap{padding:10px 14px;background:rgba(8,11,18,.97);border-top:1px solid var(--border);display:flex;gap:8px;position:sticky;bottom:0;backdrop-filter:blur(16px);z-index:10}
+
+/* ── AI RESPONSE ── */
+.ai-out{background:var(--card2);border:1px solid var(--border2);border-radius:14px;padding:16px;font-size:14px;line-height:1.75;color:var(--text)}
+.ai-out h3,.ai-out h4,.ai-out h5{color:var(--white);margin:14px 0 7px;font-weight:700}
+.ai-out h3:first-child,.ai-out h4:first-child,.ai-out h5:first-child{margin-top:0}
+.ai-out h3{font-size:16px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.ai-out h4{font-size:14px;color:var(--blue)}
+.ai-out h5{font-size:13px;color:var(--cyan)}
+.ai-out ul,.ai-out ol{padding-left:18px;margin:6px 0}
+.ai-out li{margin-bottom:5px}
+.ai-out ul li{list-style:disc}
+.ai-out ol li{list-style:decimal}
+.ai-out strong{color:var(--white);font-weight:700}
+.ai-out em{color:var(--amber);font-style:normal}
+.ai-out p{margin-bottom:9px}
+.ai-out p:last-child{margin-bottom:0}
+.ai-out code{background:var(--card3);border-radius:5px;padding:1px 6px;font-size:13px;color:var(--cyan)}
+.ai-out blockquote{border-left:3px solid var(--blue);padding-left:12px;color:var(--sub);margin:8px 0}
+
+/* ── TABS ── */
+.pill-tabs{display:flex;background:var(--card);border:1px solid var(--border);border-radius:13px;padding:4px;gap:3px;margin-bottom:16px}
+.ptab{flex:1;padding:9px 4px;border-radius:10px;font-size:12px;font-weight:700;text-align:center;cursor:pointer;color:var(--fog);background:none;border:none;font-family:inherit;transition:all .2s}
+.ptab.on{background:var(--blue);color:#fff;box-shadow:0 2px 8px rgba(59,130,246,.3)}
+.tab-panel{display:none}
+.tab-panel.on{display:block}
+
+/* ── CHAPTER ITEM ── */
+.ch-row{display:flex;align-items:center;gap:12px;padding:14px;background:var(--card);border:1px solid var(--border);border-radius:13px;cursor:pointer;transition:all .15s;margin-bottom:8px}
+.ch-row:active{background:var(--card2);transform:scale(.98)}
+.ch-num{width:38px;height:38px;border-radius:10px;background:var(--card2);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--fog);flex-shrink:0}
+.ch-num.done{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.25);color:var(--green)}
+.ch-num.locked{background:rgba(239,68,68,.05);border-color:rgba(239,68,68,.2);color:var(--red)}
+
+/* ── SUBJECT CARD ── */
+.subj-card{background:var(--card);border:1px solid var(--border);border-radius:15px;padding:18px;cursor:pointer;transition:all .2s;text-align:center}
+.subj-card:hover{border-color:var(--blue);transform:translateY(-2px);box-shadow:var(--shadow-blue)}
+.subj-card:active{transform:scale(.96)}
+
+/* ── STAT CARD ── */
+.stat{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center}
+.stat-val{font-size:28px;font-weight:800;line-height:1}
+.stat-lbl{font-size:10px;color:var(--fog);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-top:5px}
+
+/* ── XP / GAMIFICATION ── */
+.xp-bar-wrap{background:var(--card2);border:1px solid var(--border2);border-radius:12px;padding:12px 16px}
+.xp-bar{height:8px;background:rgba(255,255,255,.05);border-radius:99px;overflow:hidden;margin:8px 0}
+.xp-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#f59e0b,#ef4444);transition:width .8s cubic-bezier(.4,0,.2,1)}
+.badge-row{display:flex;gap:8px;flex-wrap:wrap}
+.badge-item{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px;background:var(--card2);border:1px solid var(--border2);border-radius:12px;min-width:64px;font-size:11px;color:var(--fog);text-align:center}
+.badge-item.earned{border-color:var(--gold);background:rgba(251,191,36,.06)}
+.badge-icon{font-size:24px}
+
+/* ── 5M FRAMEWORK ── */
+.m5-step{border-radius:14px;padding:16px;margin-bottom:12px;border:1px solid transparent;transition:all .2s}
+.m5-1{background:linear-gradient(135deg,rgba(59,130,246,.08),rgba(99,102,241,.05));border-color:rgba(59,130,246,.2)}
+.m5-2{background:linear-gradient(135deg,rgba(139,92,246,.08),rgba(236,72,153,.05));border-color:rgba(139,92,246,.2)}
+.m5-3{background:linear-gradient(135deg,rgba(34,197,94,.08),rgba(6,182,212,.05));border-color:rgba(34,197,94,.2)}
+.m5-4{background:linear-gradient(135deg,rgba(245,158,11,.08),rgba(239,68,68,.05));border-color:rgba(245,158,11,.2)}
+.m5-5{background:linear-gradient(135deg,rgba(6,182,212,.08),rgba(59,130,246,.05));border-color:rgba(6,182,212,.2)}
+.m5-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.m5-tag{padding:2px 8px;border-radius:100px;font-size:10px;font-weight:700}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--card2);border:1px solid var(--border2);border-radius:13px;padding:11px 20px;font-size:13px;font-weight:600;opacity:0;transition:all .28s;z-index:9999;pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center;box-shadow:var(--shadow)}
+#toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── MODAL ── */
+#modal-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.75);display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
+#modal-overlay.on{display:flex}
+#modal-box{background:var(--bg2);border:1px solid var(--border);border-radius:22px 22px 0 0;padding:20px;width:100%;max-height:88vh;overflow-y:auto}
+.modal-handle{width:40px;height:4px;background:var(--border2);border-radius:99px;margin:0 auto 18px}
+
+/* ── LOCK OVERLAY ── */
+.lock-overlay{position:absolute;inset:0;background:rgba(8,11,18,.85);border-radius:inherit;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;z-index:5;backdrop-filter:blur(4px)}
+
+/* ── PAYWALL CARD ── */
+.paywall{background:linear-gradient(135deg,var(--bg3),var(--card2));border:1px solid var(--border2);border-radius:18px;padding:24px;text-align:center;position:relative;overflow:hidden}
+.paywall::before{content:'';position:absolute;top:-40px;right:-40px;width:120px;height:120px;background:radial-gradient(circle,rgba(59,130,246,.15),transparent 70%)}
+.plan-card{background:var(--card2);border:1.5px solid var(--border2);border-radius:15px;padding:18px;cursor:pointer;transition:all .2s}
+.plan-card:hover,.plan-card.selected{border-color:var(--blue);background:rgba(59,130,246,.06)}
+.plan-card.popular{border-color:var(--gold);background:rgba(251,191,36,.04)}
+.popular-tag{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--grad-gold);color:#fff;padding:3px 12px;border-radius:100px;font-size:11px;font-weight:700;white-space:nowrap}
+
+/* ── ONBOARDING ── */
+.onboard-hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px;background:var(--bg)}
+.role-card{background:var(--card);border:2px solid var(--border);border-radius:20px;padding:24px;cursor:pointer;transition:all .2s;text-align:center}
+.role-card:hover{border-color:var(--blue);transform:translateY(-3px);box-shadow:var(--shadow-blue)}
+.role-card:active{transform:scale(.96)}
+.role-card.selected{border-color:var(--blue);background:rgba(59,130,246,.06)}
+
+/* ── DIAGNOSTIC ── */
+.diag-card{background:linear-gradient(135deg,var(--card2),var(--card3));border:1px solid var(--border2);border-radius:16px;padding:20px;margin-bottom:12px}
+
+/* ── MINDFULNESS ── */
+.breath-circle{width:100px;height:100px;border-radius:50%;border:3px solid var(--cyan);display:flex;align-items:center;justify-content:center;margin:0 auto;font-size:13px;font-weight:700;color:var(--cyan);animation:breathe 4s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(6,182,212,.3)}50%{transform:scale(1.15);box-shadow:0 0 0 16px rgba(6,182,212,0)}}
+
+/* ── STREAK FLAME ── */
+.flame{display:inline-block;animation:flicker .8s ease-in-out infinite alternate}
+@keyframes flicker{from{transform:scale(1) rotate(-2deg)}to{transform:scale(1.08) rotate(2deg)}}
+
+/* ── DIVIDER ── */
+.div{height:1px;background:var(--border);margin:16px 0}
+.div-text{display:flex;align-items:center;gap:12px;margin:16px 0}
+.div-text::before,.div-text::after{content:'';flex:1;height:1px;background:var(--border)}
+.div-text span{font-size:12px;color:var(--fog);white-space:nowrap}
+
+/* ── EMPTY ── */
+.empty{text-align:center;padding:40px 16px;color:var(--fog)}
+.empty-icon{font-size:48px;margin-bottom:12px;display:block}
+.empty-ttl{font-size:16px;font-weight:700;color:var(--sub);margin-bottom:6px}
+
+/* ── SCROLL ── */
+::-webkit-scrollbar{width:3px;height:3px}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:99px}
+
+/* ── NOTIFICATION DOT ── */
+.notif-dot{width:8px;height:8px;background:var(--red);border-radius:50%;flex-shrink:0}
+
+/* ── VIDEO EMBED ── */
+.video-wrap{position:relative;padding-top:56.25%;border-radius:14px;overflow:hidden;background:#000;margin-bottom:12px}
+.video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:none}
+
+/* ── RESPONSIVE ── */
+@media(min-width:600px){
+  .content,.content-nb{max-width:600px;margin:0 auto}
+  .bnav{max-width:600px;left:50%;transform:translateX(-50%)}
+  #toast{bottom:100px}
+}
+</style>
+</head>
+<body>
+
+<!-- 
+     ONBOARDING: SPLASH
+ -->
+<div id="sc-splash" class="screen on" style="align-items:center;justify-content:center;background:var(--bg);padding:28px;position:relative;overflow:hidden">
+  <!-- Background glow -->
+  <div style="position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:400px;height:400px;background:radial-gradient(circle,rgba(59,130,246,.12),transparent 70%);pointer-events:none"></div>
+  <div style="position:absolute;bottom:-60px;right:-60px;width:280px;height:280px;background:radial-gradient(circle,rgba(99,102,241,.1),transparent 70%);pointer-events:none"></div>
+
+  <div style="text-align:center;position:relative;z-index:1">
+    <!-- Logo mark -->
+    <div style="width:90px;height:90px;background:var(--grad);border-radius:24px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 8px 32px rgba(59,130,246,.35);animation:breathe 3s ease infinite">
+      <span style="font-size:42px">📖</span>
+    </div>
+
+    <!-- Brand name -->
+    <div style="font-size:32px;font-weight:900;letter-spacing:-.03em;margin-bottom:6px;line-height:1">
+      Master<span style="background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">in</span>Minutes<sup style="font-size:13px;color:var(--fog);-webkit-text-fill-color:var(--fog);vertical-align:super;font-weight:700">TM</sup>
+    </div>
+
+    <!-- Tagline -->
+    <div style="font-size:13px;color:var(--fog);margin-bottom:8px;letter-spacing:.02em">India's First Behaviour-Based Learning System</div>
+    <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.2);border-radius:100px;padding:4px 12px;font-size:11px;color:#93c5fd;font-weight:700;margin-bottom:36px">
+      <span>AI Powered</span><span style="opacity:.6">|</span><span>NCERT + JEE + NEET</span>
+    </div>
+
+    <div class="spin" style="margin:0 auto"></div>
+  </div>
+</div>
+
+<!-- 
+     ONBOARDING: ROLE SELECT
+ -->
+
+<!-- ONE-TIME HOW WE TEACH MODAL -->
+<div id="modal-5m" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.88);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px">
+  <div style="background:#0f172a;border:1.5px solid rgba(99,102,241,.35);border-radius:22px;max-width:400px;width:100%;padding:26px;box-shadow:0 24px 80px rgba(0,0,0,.6)">
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="width:56px;height:56px;background:linear-gradient(135deg,#6366f1,#3b82f6);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:24px">&#127775;</div>
+      <div style="font-size:19px;font-weight:900;margin-bottom:5px">How We Teach</div>
+      <div style="font-size:13px;color:var(--fog);line-height:1.65">Every topic is broken into 5 simple sections designed to make concepts stick — not just for today, but for exams.</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
+      <div style="display:flex;gap:10px;align-items:center;background:rgba(59,130,246,.07);border-radius:11px;padding:10px 12px;border:1px solid rgba(59,130,246,.15)">
+        <span style="font-size:18px">&#128161;</span>
+        <div><div style="font-size:13px;font-weight:700">The Concept</div><div style="font-size:11px;color:var(--fog)">Core idea explained simply in plain English</div></div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;background:rgba(139,92,246,.07);border-radius:11px;padding:10px 12px;border:1px solid rgba(139,92,246,.15)">
+        <span style="font-size:18px">&#128336;</span>
+        <div><div style="font-size:13px;font-weight:700">Visual Map</div><div style="font-size:11px;color:var(--fog)">How all the pieces connect together</div></div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;background:rgba(34,197,94,.07);border-radius:11px;padding:10px 12px;border:1px solid rgba(34,197,94,.15)">
+        <span style="font-size:18px">&#129504;</span>
+        <div><div style="font-size:13px;font-weight:700">Remember This</div><div style="font-size:11px;color:var(--fog)">Memory tricks so nothing is forgotten</div></div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;background:rgba(245,158,11,.07);border-radius:11px;padding:10px 12px;border:1px solid rgba(245,158,11,.15)">
+        <span style="font-size:18px">&#9888;</span>
+        <div><div style="font-size:13px;font-weight:700">Watch Out</div><div style="font-size:11px;color:var(--fog)">Common mistakes students make in exams</div></div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;background:rgba(6,182,212,.07);border-radius:11px;padding:10px 12px;border:1px solid rgba(6,182,212,.15)">
+        <span style="font-size:18px">&#127757;</span>
+        <div><div style="font-size:13px;font-weight:700">Real World</div><div style="font-size:11px;color:var(--fog)">Connect it to life — makes it unforgettable</div></div>
+      </div>
+    </div>
+    <button onclick="close5MIntro()" style="width:100%;padding:14px;border-radius:13px;background:linear-gradient(135deg,#6366f1,#3b82f6);border:none;color:#fff;font-size:15px;font-weight:800;cursor:pointer;letter-spacing:.01em">Got it, start learning &#8594;</button>
+  </div>
+</div>
+
+<div id="sc-role" class="screen" style="background:var(--bg);padding:28px;position:relative;overflow:hidden">
+  <!-- Background glow -->
+  <div style="position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:340px;height:340px;background:radial-gradient(circle,rgba(99,102,241,.1),transparent 70%);pointer-events:none"></div>
+
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center;max-width:440px;margin:0 auto;width:100%;position:relative;z-index:1">
+
+    <!-- Brand header on every onboarding screen -->
+    <div style="text-align:center;margin-bottom:28px">
+      <div style="width:64px;height:64px;background:var(--grad);border-radius:18px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;box-shadow:0 6px 24px rgba(59,130,246,.3)">
+        <span style="font-size:28px">📖</span>
+      </div>
+      <div style="font-size:22px;font-weight:900;letter-spacing:-.02em;margin-bottom:4px">
+        Master<span style="background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">in</span>Minutes<sup style="font-size:10px;color:var(--fog);-webkit-text-fill-color:var(--fog);vertical-align:super;font-weight:700">TM</sup>
+      </div>
+      <div style="font-size:12px;color:var(--fog)">India's First Behaviour-Based Learning System</div>
+    </div>
+
+    <div style="text-align:center;margin-bottom:24px">
+      <div class="h2 mb6">Who are you?</div>
+      <div class="sm fog">We'll personalise your entire experience</div>
+    </div>
+
+    <div class="col gap12">
+      <div class="role-card" onclick="selectRole('student')">
+        <div style="font-size:36px;margin-bottom:10px">🎓</div>
+        <div class="h3 mb4">Student</div>
+        <div class="sm fog">AI-powered learning, earn XP, unlock chapters</div>
+      </div>
+      <div class="role-card" onclick="selectRole('teacher')">
+        <div style="font-size:36px;margin-bottom:10px">🧑‍🏫</div>
+        <div class="h3 mb4">Teacher</div>
+        <div class="sm fog">Create lesson plans, track progress, generate content</div>
+      </div>
+      <div class="role-card" onclick="selectRole('parent')">
+        <div style="font-size:36px;margin-bottom:10px">👨‍👩‍👧</div>
+        <div class="h3 mb4">Parent</div>
+        <div class="sm fog">Monitor your child's learning journey in plain language</div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:20px;font-size:11px;color:var(--muted)">
+      By continuing you agree to MasterInMinutes Terms &amp; Privacy Policy
+    </div>
+  </div>
+</div>
+
+<!-- 
+     ONBOARDING: STUDENT REGISTRATION
+ -->
+<div id="sc-register-student" class="screen" style="background:var(--bg);padding:28px">
+  <div style="flex:1;max-width:440px;margin:0 auto;width:100%;padding-top:16px">
+    <!-- MiM Brand -->
+    <div style="text-align:center;margin-bottom:24px">
+      <div style="width:52px;height:52px;background:var(--grad);border-radius:15px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;box-shadow:0 4px 16px rgba(59,130,246,.28)">
+        <span style="font-size:22px">📖</span>
+      </div>
+      <div style="font-size:18px;font-weight:900;letter-spacing:-.02em">
+        Master<span style="background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">in</span>Minutes<sup style="font-size:9px;color:var(--fog);-webkit-text-fill-color:var(--fog);vertical-align:super">TM</sup>
+      </div>
+    </div>
+    <div class="center-text mb20">
+      <div class="h2 mb4">Create Your Profile</div>
+      <div class="sm fog">Takes 30 seconds. Your data stays on your device.</div>
+    </div>
+    <div class="col gap12">
+      <div>
+        <div class="inp-label">Full Name</div>
+        <input class="inp" id="s-name" type="text" placeholder="Enter your full name">
+      </div>
+      <div>
+        <div class="inp-label">Mobile Number</div>
+        <div class="row gap8">
+          <div style="background:var(--card2);border:1.5px solid var(--border2);border-radius:13px;padding:13px 14px;font-size:14px;font-weight:700;color:var(--sub);flex-shrink:0">+91</div>
+          <input class="inp f1" id="s-phone" type="tel" maxlength="10" placeholder="10-digit number">
+        </div>
+      </div>
+      <div>
+        <div class="inp-label">Class / Grade</div>
+        <select class="inp sel" id="s-class">
+          <option value="">Select your class</option>
+          <option value="6">Class 6</option><option value="7">Class 7</option><option value="8">Class 8</option>
+          <option value="9">Class 9</option><option value="10">Class 10</option>
+          <option value="11">Class 11</option><option value="12">Class 12</option>
+          <option value="JEE">JEE Preparation</option><option value="NEET">NEET Preparation</option>
+        </select>
+      </div>
+      <div>
+        <div class="inp-label">Board</div>
+        <select class="inp sel" id="s-board">
+          <option value="cbse">CBSE</option><option value="icse">ICSE</option>
+          <option value="state">State Board</option><option value="jee">JEE</option><option value="neet">NEET</option>
+        </select>
+      </div>
+      <div>
+        <div class="inp-label">Your Goal</div>
+        <input class="inp" id="s-goal" type="text" placeholder="e.g. Score 90% in boards, crack JEE...">
+      </div>
+    </div>
+    <div class="mt20 mb16">
+      <button class="btn btn-primary btn-full" onclick="registerStudent()" style="padding:16px;font-size:15px">Start Learning →</button>
+    </div>
+    <div class="xs fog center-text">📋 For KYC verification, your Aadhaar/DigiLocker integration will be added by the MiM team.</div>
+  </div>
+</div>
+
+<!-- 
+     ONBOARDING: TEACHER REGISTRATION
+ -->
+<div id="sc-register-teacher" class="screen" style="background:var(--bg);padding:28px">
+  <div style="flex:1;max-width:440px;margin:0 auto;width:100%;padding-top:16px">
+    <!-- MiM Brand -->
+    <div style="text-align:center;margin-bottom:24px">
+      <div style="width:52px;height:52px;background:var(--grad);border-radius:15px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;box-shadow:0 4px 16px rgba(59,130,246,.28)">
+        <span style="font-size:22px">📖</span>
+      </div>
+      <div style="font-size:18px;font-weight:900;letter-spacing:-.02em">
+        Master<span style="background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">in</span>Minutes<sup style="font-size:9px;color:var(--fog);-webkit-text-fill-color:var(--fog);vertical-align:super">TM</sup>
+      </div>
+    </div>
+    <div class="center-text mb20">
+      <div class="h2 mb4">Teacher Setup</div>
+      <div class="sm fog">Create your teaching profile</div>
+    </div>
+    <div class="col gap12">
+      <div><div class="inp-label">Full Name</div><input class="inp" id="t-name" type="text" placeholder="Your name"></div>
+      <div><div class="inp-label">Mobile Number</div><input class="inp" id="t-phone" type="tel" maxlength="10" placeholder="10-digit number"></div>
+      <div><div class="inp-label">School Name</div><input class="inp" id="t-school" type="text" placeholder="School / Institution name"></div>
+      <div><div class="inp-label">Subject(s) You Teach</div><input class="inp" id="t-subjects" type="text" placeholder="e.g. Physics, Chemistry"></div>
+      <div><div class="inp-label">Classes You Teach</div><input class="inp" id="t-classes" type="text" placeholder="e.g. 9, 10, 11"></div>
+    </div>
+    <div class="mt20"><button class="btn btn-primary btn-full" onclick="registerTeacher()" style="padding:16px;font-size:15px">Enter Teacher Portal →</button></div>
+  </div>
+</div>
+
+<!-- 
+     ONBOARDING: PARENT REGISTRATION
+ -->
+<div id="sc-register-parent" class="screen" style="background:var(--bg);padding:28px">
+  <div style="flex:1;max-width:440px;margin:0 auto;width:100%;padding-top:16px">
+    <!-- MiM Brand -->
+    <div style="text-align:center;margin-bottom:24px">
+      <div style="width:52px;height:52px;background:var(--grad);border-radius:15px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;box-shadow:0 4px 16px rgba(59,130,246,.28)">
+        <span style="font-size:22px">📖</span>
+      </div>
+      <div style="font-size:18px;font-weight:900;letter-spacing:-.02em">
+        Master<span style="background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">in</span>Minutes<sup style="font-size:9px;color:var(--fog);-webkit-text-fill-color:var(--fog);vertical-align:super">TM</sup>
+      </div>
+    </div>
+    <div class="center-text mb20">
+      <div class="h2 mb4">Parent Dashboard</div>
+      <div class="sm fog">Monitor your child's progress</div>
+    </div>
+    <div class="col gap12">
+      <div><div class="inp-label">Your Name</div><input class="inp" id="p-name" type="text" placeholder="Parent name"></div>
+      <div><div class="inp-label">Mobile Number</div><input class="inp" id="p-phone" type="tel" maxlength="10" placeholder="10-digit number"></div>
+      <div><div class="inp-label">Child's Name</div><input class="inp" id="p-child" type="text" placeholder="Child's name"></div>
+      <div><div class="inp-label">Child's Class</div>
+        <select class="inp sel" id="p-class">
+          <option value="6">Class 6</option><option value="7">Class 7</option><option value="8">Class 8</option>
+          <option value="9">Class 9</option><option value="10" selected>Class 10</option>
+          <option value="11">Class 11</option><option value="12">Class 12</option>
+        </select>
+      </div>
+    </div>
+    <div class="mt20"><button class="btn btn-primary btn-full" onclick="registerParent()" style="padding:16px;font-size:15px">View Dashboard →</button></div>
+  </div>
+</div>
+
+<!-- 
+     API KEY SETUP
+ -->
+<div id="sc-apikey" class="screen" style="background:var(--bg);align-items:center;justify-content:center;padding:28px">
+  <div style="width:100%;max-width:400px">
+
+    <!-- MiM Brand -->
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="width:64px;height:64px;background:var(--grad);border-radius:18px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;box-shadow:0 6px 24px rgba(59,130,246,.3)">
+        <span style="font-size:28px">&#128218;</span>
+      </div>
+      <div style="font-size:20px;font-weight:900;letter-spacing:-.02em;margin-bottom:2px">
+        Master<span style="background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">in</span>Minutes<sup style="font-size:10px;color:var(--fog);-webkit-text-fill-color:var(--fog);vertical-align:super">TM</sup>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="font-size:32px;margin-bottom:8px">&#128273;</div>
+      <div style="font-size:20px;font-weight:800;margin-bottom:8px">One Last Step!</div>
+      <div style="font-size:13px;color:var(--fog);line-height:1.7">This app needs a <strong style="color:var(--white)">free Anthropic API key</strong> to power all AI features.</div>
+    </div>
+
+    <div style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:#86efac">
+      &#10003; &nbsp;Anthropic gives <strong>$5 free credits</strong> on signup - enough for hundreds of sessions
+    </div>
+
+    <div style="background:var(--card2);border:1px solid var(--border2);border-radius:14px;padding:16px;margin-bottom:16px;font-size:13px;color:var(--sub);line-height:1.9">
+      <strong style="color:var(--white)">Step 1:</strong> Visit <a href="https://console.anthropic.com" target="_blank" style="color:var(--blue);font-weight:700">console.anthropic.com</a> and sign up free<br>
+      <strong style="color:var(--white)">Step 2:</strong> Click <strong style="color:var(--white)">API Keys</strong> in the left menu<br>
+      <strong style="color:var(--white)">Step 3:</strong> Tap <strong style="color:var(--white)">Create Key</strong> and copy it<br>
+      <strong style="color:var(--white)">Step 4:</strong> Paste it below and tap Activate
+    </div>
+
+    <input class="inp mb12" id="api-inp" type="password" placeholder="Paste your key here: sk-ant-...">
+    <button class="btn btn-primary btn-full mb10" onclick="saveApiKey()" style="padding:15px;font-size:15px;font-weight:800">Activate AI Features</button>
+    <button class="btn btn-ghost btn-full btn-sm" onclick="skipApiKey()" style="font-size:12px">Add it later (limited features)</button>
+    <div style="text-align:center;margin-top:12px;font-size:11px;color:var(--muted)">&#128274; Key stays on your device only. Never shared.</div>
+  </div>
+</div>
+<!-- 
+     STUDENT APP
+ -->
+
+<!-- HOME -->
+<div id="sc-home" class="screen">
+  <div class="topbar">
+    <div class="col f1" style="overflow:hidden">
+      <div class="logo-text">Master<span>in</span>Minutes<sup class="logo-tm">™</sup></div>
+    </div>
+    <div class="topbar-right">
+      <div class="row gap6 acenter" style="background:var(--card2);border:1px solid var(--border2);border-radius:10px;padding:6px 10px">
+        <span class="flame">🔥</span>
+        <span style="font-size:14px;font-weight:800;color:var(--amber)" id="home-streak">0</span>
+      </div>
+      <div style="background:var(--card2);border:1px solid var(--border2);border-radius:10px;padding:6px 10px;font-size:13px;font-weight:700;color:var(--gold)" id="home-xp">0 XP</div>
+    </div>
+  </div>
+  <div class="content">
+    <!-- API Key Banner -->
+    <div id="home-api-banner" style="display:none;background:linear-gradient(135deg,rgba(245,158,11,.1),rgba(239,68,68,.06));border:1.5px solid rgba(245,158,11,.3);border-radius:14px;padding:14px 16px;margin-bottom:16px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="font-size:22px">&#9888;&#65039;</div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:800;color:#fcd34d;margin-bottom:2px">No API Key — AI features off</div>
+          <div style="font-size:11px;color:var(--fog)">Add your free Anthropic key to unlock everything</div>
+        </div>
+        <button onclick="go('apikey')" style="background:rgba(245,158,11,.25);border:1px solid rgba(245,158,11,.4);color:#fcd34d;padding:7px 14px;font-size:12px;font-weight:800;border-radius:9px;cursor:pointer;white-space:nowrap">Add Key &#8594;</button>
+      </div>
+    </div>
+    <!-- Greeting + Level -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <div>
+        <div style="font-size:22px;font-weight:900;color:#fff" id="home-greeting">Good morning! &#128075;</div>
+        <div style="font-size:13px;color:var(--fog);margin-top:2px" id="home-goal-display"></div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:11px;color:var(--fog);margin-bottom:2px">LEVEL <span id="home-level" style="color:#fbbf24;font-weight:800">1</span></div>
+        <div style="background:rgba(251,191,36,.15);border:1px solid rgba(251,191,36,.3);border-radius:8px;padding:4px 10px;font-size:12px;font-weight:800;color:#fbbf24" id="home-plan-badge">Freemium</div>
+      </div>
+    </div>
+
+    <!-- XP Bar -->
+    <div style="background:var(--card2);border:1px solid var(--border2);border-radius:14px;padding:14px;margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+        <span style="font-size:12px;font-weight:700;color:var(--fog)">XP Progress</span>
+        <span style="font-size:12px;font-weight:800;color:#fbbf24" id="home-xp-next">100 XP to next level</span>
+      </div>
+      <div style="height:8px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden;margin-bottom:6px">
+        <div id="home-xp-bar" style="height:100%;border-radius:99px;background:linear-gradient(90deg,#f59e0b,#ef4444);width:0%;transition:width .6s ease"></div>
+      </div>
+      <div style="font-size:11px;color:var(--fog)" id="home-xp-label">0 / 100 XP</div>
+    </div>
+
+    <!-- Stats row -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px">
+      <div style="background:linear-gradient(135deg,rgba(245,158,11,.12),rgba(245,158,11,.04));border:1px solid rgba(245,158,11,.25);border-radius:14px;padding:14px;text-align:center">
+        <div style="font-size:24px;font-weight:900;color:#f59e0b" id="home-streak2">0</div>
+        <div style="font-size:11px;color:var(--fog);margin-top:2px">&#128293; Streak</div>
+      </div>
+      <div style="background:linear-gradient(135deg,rgba(59,130,246,.12),rgba(59,130,246,.04));border:1px solid rgba(59,130,246,.25);border-radius:14px;padding:14px;text-align:center">
+        <div style="font-size:24px;font-weight:900;color:#3b82f6" id="home-done">0</div>
+        <div style="font-size:11px;color:var(--fog);margin-top:2px">&#9989; Done</div>
+      </div>
+      <div style="background:linear-gradient(135deg,rgba(34,197,94,.12),rgba(34,197,94,.04));border:1px solid rgba(34,197,94,.25);border-radius:14px;padding:14px;text-align:center">
+        <div style="font-size:24px;font-weight:900;color:#22c55e" id="home-avg">&#8211;</div>
+        <div style="font-size:11px;color:var(--fog);margin-top:2px">&#127919; Avg Score</div>
+      </div>
+    </div>
+
+    <!-- Daily Goal -->
+    <div style="background:linear-gradient(135deg,rgba(99,102,241,.1),rgba(59,130,246,.06));border:1.5px solid rgba(99,102,241,.25);border-radius:16px;padding:16px;margin-bottom:14px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div style="font-size:13px;font-weight:800;color:#a5b4fc">TODAY&#8217;S GOAL</div>
+        <span style="font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px;background:rgba(34,197,94,.2);color:#4ade80" id="daily-status">In Progress</span>
+      </div>
+      <div style="font-size:14px;color:#e2e8f0;margin-bottom:10px" id="daily-goal-text">Complete 1 chapter today</div>
+      <div style="height:6px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden;margin-bottom:6px">
+        <div id="daily-prog" style="height:100%;border-radius:99px;background:linear-gradient(90deg,#22c55e,#06b6d4);width:0%;transition:width .6s ease"></div>
+      </div>
+      <div style="font-size:11px;color:var(--fog)" id="daily-prog-text">0 / 1 chapters today</div>
+    </div>
+
+    <!-- Quick Action Buttons -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+      <button onclick="go('boards')" style="padding:16px 12px;border-radius:16px;background:linear-gradient(135deg,#3b82f6,#6366f1);border:none;color:#fff;font-size:14px;font-weight:800;cursor:pointer;text-align:left">
+        <div style="font-size:22px;margin-bottom:6px">&#128218;</div>
+        <div>Continue Learning</div>
+        <div style="font-size:11px;opacity:.75;margin-top:2px">Pick a chapter</div>
+      </button>
+      <button onclick="go('ask')" style="padding:16px 12px;border-radius:16px;background:linear-gradient(135deg,#8b5cf6,#ec4899);border:none;color:#fff;font-size:14px;font-weight:800;cursor:pointer;text-align:left">
+        <div style="font-size:22px;margin-bottom:6px">&#129302;</div>
+        <div>Ask AI Anything</div>
+        <div style="font-size:11px;opacity:.75;margin-top:2px">Any subject</div>
+      </button>
+    </div>
+
+    <!-- Recent -->
+    <div style="font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--fog);text-transform:uppercase;margin-bottom:10px">RECENTLY STUDIED</div>
+    <div id="home-recent" style="margin-bottom:16px"></div>
+
+    <!-- Badges -->
+    <div style="font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--fog);text-transform:uppercase;margin-bottom:10px">YOUR BADGES</div>
+    <div id="home-badges" class="badge-row"></div>
+  </div>
+  <nav class="bnav bnav-5">
+    <button class="bnav-btn on" data-pg="home" onclick="go('home')"><span class="bnav-icon">🏠</span><span class="bnav-lbl">Home</span></button>
+    <button class="bnav-btn" data-pg="boards" onclick="go('boards')"><span class="bnav-icon">📚</span><span class="bnav-lbl">Learn</span></button>
+    <button class="bnav-btn" data-pg="ask" onclick="go('ask')"><span class="bnav-icon">🔍</span><span class="bnav-lbl">Ask AI</span></button>
+    <button class="bnav-btn" data-pg="progress" onclick="go('progress')"><span class="bnav-icon">📊</span><span class="bnav-lbl">Progress</span></button>
+    <button class="bnav-btn" data-pg="profile" onclick="go('profile')"><span class="bnav-icon">👤</span><span class="bnav-lbl">Me</span></button>
+  </nav>
+</div>
+
+<!-- BOARDS -->
+<div id="sc-boards" class="screen">
+  <div class="topbar">
+    <div class="logo-text">Master<span>in</span>Minutes<sup class="logo-tm">™</sup></div>
+    <div style="flex:1"></div>
+    <span class="badge b-blue" id="boards-plan">Free</span>
+  </div>
+  <div class="content">
+    <div class="h2 mb4">Courses</div>
+    <div class="sm fog mb16">Select your board and start your learning journey</div>
+    <div id="boards-list"></div>
+  </div>
+  <nav class="bnav bnav-5">
+    <button class="bnav-btn" data-pg="home" onclick="go('home')"><span class="bnav-icon">🏠</span><span class="bnav-lbl">Home</span></button>
+    <button class="bnav-btn on" data-pg="boards" onclick="go('boards')"><span class="bnav-icon">📚</span><span class="bnav-lbl">Learn</span></button>
+    <button class="bnav-btn" data-pg="ask" onclick="go('ask')"><span class="bnav-icon">🔍</span><span class="bnav-lbl">Ask AI</span></button>
+    <button class="bnav-btn" data-pg="progress" onclick="go('progress')"><span class="bnav-icon">📊</span><span class="bnav-lbl">Progress</span></button>
+    <button class="bnav-btn" data-pg="profile" onclick="go('profile')"><span class="bnav-icon">👤</span><span class="bnav-lbl">Me</span></button>
+  </nav>
+</div>
+
+<!-- SUBJECTS -->
+<div id="sc-subjects" class="screen">
+  <div class="topbar">
+    <button class="btn-back" onclick="go('boards')">‹</button>
+    <div class="col f1" style="overflow:hidden">
+      <div class="topbar-title" id="subjects-title">Subjects</div>
+    </div>
+  </div>
+  <div class="content">
+    <div id="subjects-grid"></div>
+  </div>
+</div>
+
+<!-- CHAPTERS -->
+<div id="sc-chapters" class="screen">
+  <div class="topbar">
+    <button class="btn-back" onclick="go('subjects')">‹</button>
+    <div class="col f1" style="overflow:hidden">
+      <div class="topbar-title" id="chapters-title">Chapters</div>
+      <div class="topbar-sub" id="chapters-sub"></div>
+    </div>
+    <div class="row gap6">
+      <span id="chapters-done-badge" class="badge b-green" style="display:none"></span>
+    </div>
+  </div>
+  <div class="content">
+    <div id="chapters-list"></div>
+  </div>
+</div>
+
+<!-- DIAGNOSTIC (pre-chapter) -->
+<div id="sc-diagnostic" class="screen">
+  <div class="topbar">
+    <button class="btn-back" onclick="go('chapters')">‹</button>
+    <div class="topbar-title">Quick Diagnostic</div>
+    <span class="badge b-violet">2 Questions</span>
+  </div>
+  <div class="content">
+    <div class="card mb16" style="background:linear-gradient(135deg,rgba(139,92,246,.08),rgba(59,130,246,.05));border-color:rgba(139,92,246,.2)">
+      <div style="font-size:28px;margin-bottom:8px">🧠</div>
+      <div class="h3 mb6">Before We Begin</div>
+      <div class="sm sub lh">Let me understand what you already know about <strong id="diag-chapter"></strong>. This helps me personalise your 5M learning session.</div>
+    </div>
+    <div id="diag-area"></div>
+  </div>
+</div>
+
+<!-- CHAPTER 5M LEARNING -->
+<div id="sc-chapter" class="screen">
+  <div class="topbar">
+    <button class="btn-back" onclick="go('chapters')">‹</button>
+    <div class="col f1" style="overflow:hidden">
+      <div class="topbar-title" id="ch-title">Chapter</div>
+      <div class="topbar-sub" id="ch-sub"></div>
+    </div>
+    <div id="ch-status"></div>
+  </div>
+  <div class="content">
+    <!-- Chapter Tabs - scrollable row -->
+    <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;margin-bottom:14px;padding-bottom:2px">
+      <div style="display:flex;gap:6px;min-width:max-content;background:var(--card2);border:1px solid var(--border2);border-radius:14px;padding:5px">
+        <button class="ptab on" data-tab="snapshot" onclick="switchTab('snapshot')" style="white-space:nowrap">&#9889; Snapshot</button>
+        <button class="ptab" data-tab="learn" onclick="switchTab('learn')" style="white-space:nowrap">&#128218; Learn</button>
+        <button class="ptab" data-tab="quiz" onclick="switchTab('quiz')" style="white-space:nowrap">&#128161; Quiz</button>
+        <button class="ptab" data-tab="radar" onclick="switchTab('radar')" style="white-space:nowrap">&#128225; Exam Radar</button>
+        <button class="ptab" data-tab="tutor" onclick="switchTab('tutor')" style="white-space:nowrap">&#129302; Ask AI</button>
+        <button class="ptab" data-tab="video" onclick="switchTab('video')" style="white-space:nowrap">&#127909; Video</button>
+      </div>
+    </div>
+    <!-- hidden elements still needed by JS -->
+    <div id="m5-dots" style="display:none"></div>
+    <div id="m5-step-label" style="display:none"></div>
+    <div id="m5-prog" style="display:none"></div>
+
+    <!-- SNAPSHOT TAB -->
+    <div class="tab-panel on" id="tab-snapshot">
+      <div id="snapshot-area"></div>
+    </div>
+
+    <!-- LEARN TAB -->
+    <div class="tab-panel" id="tab-learn">
+      <div id="learn-area"></div>
+    </div>
+
+    <!-- QUIZ TAB -->
+    <div class="tab-panel" id="tab-quiz">
+      <div id="quiz-area"></div>
+    </div>
+
+    <!-- EXAM RADAR TAB -->
+    <div class="tab-panel" id="tab-radar">
+      <div id="radar-area"></div>
+    </div>
+
+    <!-- TUTOR TAB -->
+    <div class="tab-panel" id="tab-tutor">
+      <div id="tutor-area"></div>
+    </div>
+
+    <!-- VIDEO TAB -->
+    <div class="tab-panel" id="tab-video">
+      <div id="video-area"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ASK AI -->
+<div id="sc-ask" class="screen">
+  <div class="topbar">
+    <div class="logo-text">Master<span>in</span>Minutes<sup class="logo-tm">™</sup></div>
+    <div style="flex:1"></div>
+    <span class="badge b-violet">AI Search</span>
+  </div>
+  <div class="content">
+    <div class="h2 mb4">Ask Anything</div>
+    <div class="sm fog mb16">Any NCERT topic, concept, or doubt</div>
+    <div class="row gap8 mb16">
+      <input class="inp f1" id="ask-inp" type="text" placeholder="e.g. Explain Work-Energy theorem...">
+      <button class="btn btn-primary btn-icon" onclick="doAsk()">↑</button>
+    </div>
+    <div class="h4 mb10">QUICK TOPICS</div>
+    <div class="col gap8 mb16" id="quick-topics"></div>
+    <div id="ask-output"></div>
+  </div>
+  <nav class="bnav bnav-5">
+    <button class="bnav-btn" data-pg="home" onclick="go('home')"><span class="bnav-icon">🏠</span><span class="bnav-lbl">Home</span></button>
+    <button class="bnav-btn" data-pg="boards" onclick="go('boards')"><span class="bnav-icon">📚</span><span class="bnav-lbl">Learn</span></button>
+    <button class="bnav-btn on" data-pg="ask" onclick="go('ask')"><span class="bnav-icon">🔍</span><span class="bnav-lbl">Ask AI</span></button>
+    <button class="bnav-btn" data-pg="progress" onclick="go('progress')"><span class="bnav-icon">📊</span><span class="bnav-lbl">Progress</span></button>
+    <button class="bnav-btn" data-pg="profile" onclick="go('profile')"><span class="bnav-icon">👤</span><span class="bnav-lbl">Me</span></button>
+  </nav>
+</div>
+
+<!-- PROGRESS -->
+<div id="sc-progress" class="screen">
+  <div class="topbar">
+    <div class="logo-text">Master<span>in</span>Minutes<sup class="logo-tm">™</sup></div>
+  </div>
+  <div class="content">
+    <div class="h2 mb16">My Progress</div>
+    <div class="g2 mb16">
+      <div class="stat"><div class="stat-val am" id="prog-streak">0</div><div class="stat-lbl">🔥 Streak</div></div>
+      <div class="stat"><div class="stat-val bl" id="prog-xp">0</div><div class="stat-lbl">⚡ Total XP</div></div>
+      <div class="stat"><div class="stat-val g" id="prog-done">0</div><div class="stat-lbl">Completed</div></div>
+      <div class="stat"><div class="stat-val" style="color:var(--violet)" id="prog-avg">–</div><div class="stat-lbl">Avg Score</div></div>
+    </div>
+    <div class="h4 mb10">COMPLETED CHAPTERS</div>
+    <div id="prog-list"></div>
+  </div>
+  <nav class="bnav bnav-5">
+    <button class="bnav-btn" data-pg="home" onclick="go('home')"><span class="bnav-icon">🏠</span><span class="bnav-lbl">Home</span></button>
+    <button class="bnav-btn" data-pg="boards" onclick="go('boards')"><span class="bnav-icon">📚</span><span class="bnav-lbl">Learn</span></button>
+    <button class="bnav-btn" data-pg="ask" onclick="go('ask')"><span class="bnav-icon">🔍</span><span class="bnav-lbl">Ask AI</span></button>
+    <button class="bnav-btn on" data-pg="progress" onclick="go('progress')"><span class="bnav-icon">📊</span><span class="bnav-lbl">Progress</span></button>
+    <button class="bnav-btn" data-pg="profile" onclick="go('profile')"><span class="bnav-icon">👤</span><span class="bnav-lbl">Me</span></button>
+  </nav>
+</div>
+
+<!-- PROFILE -->
+<div id="sc-profile" class="screen">
+  <div class="topbar">
+    <div class="logo-text">Master<span>in</span>Minutes<sup class="logo-tm">™</sup></div>
+  </div>
+  <div class="content">
+    <div class="row gap12 mb20">
+      <div style="width:56px;height:56px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:#fff;flex-shrink:0" id="prof-avatar">?</div>
+      <div>
+        <div class="h3 mb2" id="prof-name">Student</div>
+        <div class="sm fog" id="prof-detail">Class — Board</div>
+        <div class="xs mt4" id="prof-goal-tag" style="color:var(--cyan)"></div>
+      </div>
+    </div>
+
+    <!-- Plan -->
+    <div class="paywall mb16" id="plan-section">
+      <div style="font-size:28px;margin-bottom:8px">⚡</div>
+      <div class="h3 mb4 grad" id="plan-name">Freemium Plan</div>
+      <div class="sm sub mb14" id="plan-desc">3 free chapters per subject · Basic quiz · Limited AI</div>
+      <button class="btn btn-gold btn-full" onclick="showPlans()">Upgrade to Pro →</button>
+    </div>
+
+    <!-- Settings -->
+    <div class="card mb12">
+      <div class="h4 mb12">SETTINGS</div>
+      <button class="btn btn-secondary btn-full btn-sm mb8" onclick="go('apikey')">🔑 API Key Settings</button>
+      <button class="btn btn-secondary btn-full btn-sm mb8" onclick="switchUser()">🔄 Switch Profile</button>
+      <button class="btn btn-ghost btn-full btn-sm" onclick="resetAll()" style="color:var(--red);border-color:rgba(239,68,68,.3)">🗑 Reset All Data</button>
+    </div>
+  </div>
+  <nav class="bnav bnav-5">
+    <button class="bnav-btn" data-pg="home" onclick="go('home')"><span class="bnav-icon">🏠</span><span class="bnav-lbl">Home</span></button>
+    <button class="bnav-btn" data-pg="boards" onclick="go('boards')"><span class="bnav-icon">📚</span><span class="bnav-lbl">Learn</span></button>
+    <button class="bnav-btn" data-pg="ask" onclick="go('ask')"><span class="bnav-icon">🔍</span><span class="bnav-lbl">Ask AI</span></button>
+    <button class="bnav-btn" data-pg="progress" onclick="go('progress')"><span class="bnav-icon">📊</span><span class="bnav-lbl">Progress</span></button>
+    <button class="bnav-btn on" data-pg="profile" onclick="go('profile')"><span class="bnav-icon">👤</span><span class="bnav-lbl">Me</span></button>
+  </nav>
+</div>
+
+<!-- 
+     TEACHER APP
+ -->
+<div id="sc-teacher-home" class="screen">
+  <div class="topbar">
+    <div class="logo-text">Master<span>in</span>Minutes<sup class="logo-tm">™</sup></div>
+    <div style="flex:1"></div>
+    <span class="badge b-violet">Teacher</span>
+  </div>
+  <div class="content">
+    <div class="h2 mb4" id="t-welcome">Teacher Portal</div>
+    <div class="sm fog mb20" id="t-school-name"></div>
+
+    <div class="g2 mb20">
+      <button class="subj-card" onclick="tQuickGen('lesson')" style="padding:20px">
+        <div style="font-size:32px;margin-bottom:8px">📋</div>
+        <div class="bold">Lesson Plan</div>
+        <div class="xs fog mt4">AI-powered</div>
+      </button>
+      <button class="subj-card" onclick="tQuickGen('worksheet')" style="padding:20px">
+        <div style="font-size:32px;margin-bottom:8px">📝</div>
+        <div class="bold">Worksheet</div>
+        <div class="xs fog mt4">Generate instantly</div>
+      </button>
+      <button class="subj-card" onclick="tQuickGen('quiz')" style="padding:20px">
+        <div style="font-size:32px;margin-bottom:8px">🧠</div>
+        <div class="bold">Quiz Set</div>
+        <div class="xs fog mt4">10 MCQ + answers</div>
+      </button>
+      <button class="subj-card" onclick="go('teacher-progress')" style="padding:20px">
+        <div style="font-size:32px;margin-bottom:8px">📊</div>
+        <div class="bold">Student Progress</div>
+        <div class="xs fog mt4">Track &amp; unlock</div>
+      </button>
+    </div>
+
+    <div class="h4 mb10">QUICK GENERATE</div>
+    <div class="card mb12">
+      <div class="inp-label mb6">Chapter Name</div>
+      <input class="inp mb10" id="tq-chapter" type="text" placeholder="e.g. Work, Energy and Power">
+      <div class="row gap8 mb10">
+        <select class="inp sel f1" id="tq-subject"><option>Science</option><option>Mathematics</option><option>Physics</option><option>Chemistry</option><option>Biology</option><option>History</option><option>Geography</option><option>Economics</option></select>
+        <select class="inp sel" id="tq-grade" style="width:90px"><option>6</option><option>7</option><option>8</option><option>9</option><option selected>10</option><option>11</option><option>12</option></select>
+      </div>
+      <div class="col gap8">
+        <button class="btn btn-primary btn-full" onclick="tGenLesson()">📋 Generate Lesson Plan</button>
+        <button class="btn btn-secondary btn-full" onclick="tGenWorksheet()">📝 Create Worksheet + Answer Key</button>
+        <button class="btn btn-secondary btn-full" onclick="tGenQuiz()">🧠 Generate 10 MCQ Quiz</button>
+        <button class="btn btn-secondary btn-full" onclick="tGenSummary()">📖 Chapter Summary</button>
+      </div>
+    </div>
+    <div id="t-output"></div>
+  </div>
+  <nav class="bnav bnav-4">
+    <button class="bnav-btn on" onclick="go('teacher-home')"><span class="bnav-icon">🏠</span><span class="bnav-lbl">Home</span></button>
+    <button class="bnav-btn" onclick="go('teacher-progress')"><span class="bnav-icon">📊</span><span class="bnav-lbl">Students</span></button>
+    <button class="bnav-btn" onclick="go('ask')"><span class="bnav-icon">🔍</span><span class="bnav-lbl">Ask AI</span></button>
+    <button class="bnav-btn" onclick="switchUser()"><span class="bnav-icon">👤</span><span class="bnav-lbl">Switch</span></button>
+  </nav>
+</div>
+
+<!-- TEACHER PROGRESS TRACKER -->
+<div id="sc-teacher-progress" class="screen">
+  <div class="topbar">
+    <button class="btn-back" onclick="go('teacher-home')">‹</button>
+    <div class="topbar-title">Student Progress Tracker</div>
+  </div>
+  <div class="content">
+    <div class="card mb16" style="background:linear-gradient(135deg,rgba(139,92,246,.08),rgba(59,130,246,.05));border-color:rgba(139,92,246,.2)">
+      <div class="sm sub lh">As a teacher, you can view each student's chapter completion, quiz scores, and clarity levels. Mark chapters as <strong style="color:var(--green)">unlocked</strong> when a student demonstrates understanding.</div>
+    </div>
+    <div id="t-student-list"></div>
+  </div>
+</div>
+
+<!-- 
+     PARENT APP
+ -->
+<div id="sc-parent-home" class="screen">
+  <div class="topbar">
+    <div class="logo-text">Master<span>in</span>Minutes<sup class="logo-tm">™</sup></div>
+    <div style="flex:1"></div>
+    <span class="badge b-green">Parent</span>
+  </div>
+  <div class="content">
+    <div class="h2 mb4" id="p-welcome">Parent Dashboard</div>
+    <div class="sm fog mb16" id="p-child-name">Your child's learning report</div>
+
+    <div class="card mb16" style="background:linear-gradient(135deg,rgba(34,197,94,.06),rgba(6,182,212,.04));border-color:rgba(34,197,94,.2)">
+      <div class="h4 mb8">CLARITY LEVEL</div>
+      <div style="font-size:36px;font-weight:800;margin-bottom:4px" id="p-clarity">–</div>
+      <div class="sm sub" id="p-clarity-desc">Enter your child's name to see their learning report</div>
+    </div>
+
+    <div class="g3 mb16">
+      <div class="stat"><div class="stat-val am" id="p-streak">0</div><div class="stat-lbl">🔥 Streak</div></div>
+      <div class="stat"><div class="stat-val bl" id="p-chapters">0</div><div class="stat-lbl">Chapters</div></div>
+      <div class="stat"><div class="stat-val g" id="p-score">–</div><div class="stat-lbl">Avg Score</div></div>
+    </div>
+
+    <div class="card mb16">
+      <div class="h4 mb10">AI PARENT REPORT</div>
+      <div class="sm fog mb12">Get a plain-language report on your child's learning progress, strengths, and how to help at home.</div>
+      <button class="btn btn-green btn-full" onclick="genParentReport()">Generate Report ✨</button>
+    </div>
+    <div id="parent-report-output"></div>
+
+    <button class="btn btn-secondary btn-full btn-sm mt12" onclick="switchUser()">🔄 Switch Profile</button>
+  </div>
+</div>
+
+<!-- PLANS MODAL CONTENT -->
+<div id="modal-overlay" onclick="if(event.target===this)hideModal()">
+  <div id="modal-box">
+    <div class="modal-handle"></div>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+// ===
+//   DATA: CURRICULUM
+// ===
+var CUR={
+  cbse:{name:'CBSE / NCERT',icon:'CBSE',classes:{
+    '6':{Science:{icon:'Sci',chapters:['Food: Where Does It Come From?','Components of Food','Fibre to Fabric','Sorting Materials into Groups','Separation of Substances','Changes Around Us','Getting to Know Plants','Body Movements','The Living Organisms','Motion and Measurement','Light Shadows and Reflections','Electricity and Circuits','Fun with Magnets','Water','Air Around Us','Garbage In Garbage Out']},Mathematics:{icon:'Math',chapters:['Knowing Our Numbers','Whole Numbers','Playing with Numbers','Basic Geometrical Ideas','Understanding Elementary Shapes','Integers','Fractions','Decimals','Data Handling','Mensuration','Algebra','Ratio and Proportion','Symmetry','Practical Geometry']},History:{icon:'Hist',chapters:['What Where How and When?','From Hunting-Gathering to Growing Food','In the Earliest Cities','What Books and Burials Tell Us','Kingdoms Kings and an Early Republic','New Questions and Ideas','Ashoka the Emperor','Vital Villages Thriving Towns','Traders Kings and Pilgrims','New Empires and Kingdoms']},Geography:{icon:'Geo',chapters:['The Earth in the Solar System','Globe Latitudes and Longitudes','Motions of the Earth','Maps','Major Domains of the Earth','Major Landforms','Our Country India','India Climate Vegetation Wildlife']}},
+    '7':{Science:{icon:'Sci',chapters:['Nutrition in Plants','Nutrition in Animals','Fibre to Fabric','Heat','Acids Bases and Salts','Physical and Chemical Changes','Weather Climate and Adaptations','Winds Storms and Cyclones','Soil','Respiration in Organisms','Transportation in Animals and Plants','Reproduction in Plants','Motion and Time','Electric Current and Its Effects','Light','Water: A Precious Resource','Forests: Our Lifeline','Wastewater Story']},Mathematics:{icon:'Math',chapters:['Integers','Fractions and Decimals','Data Handling','Simple Equations','Lines and Angles','The Triangle and its Properties','Congruence of Triangles','Comparing Quantities','Rational Numbers','Practical Geometry','Perimeter and Area','Algebraic Expressions','Exponents and Powers','Symmetry','Visualising Solid Shapes']}},
+    '8':{Science:{icon:'Sci',chapters:['Crop Production and Management','Microorganisms Friend and Foe','Synthetic Fibres and Plastics','Materials Metals and Non-Metals','Coal and Petroleum','Combustion and Flame','Conservation of Plants and Animals','Cell Structure and Functions','Reproduction in Animals','Reaching the Age of Adolescence','Force and Pressure','Friction','Sound','Chemical Effects of Electric Current','Some Natural Phenomena','Light','Stars and the Solar System','Pollution of Air and Water']},Mathematics:{icon:'Math',chapters:['Rational Numbers','Linear Equations','Understanding Quadrilaterals','Practical Geometry','Data Handling','Squares and Square Roots','Cubes and Cube Roots','Comparing Quantities','Algebraic Expressions','Visualising Solid Shapes','Mensuration','Exponents and Powers','Direct and Inverse Proportions','Factorisation','Introduction to Graphs','Playing with Numbers']}},
+    '9':{Science:{icon:'Sci',chapters:['Matter in Our Surroundings','Is Matter Around Us Pure?','Atoms and Molecules','Structure of the Atom','The Fundamental Unit of Life','Tissues','Motion','Force and Laws of Motion','Gravitation','Work and Energy','Sound','Why Do We Fall Ill?','Natural Resources','Improvement in Food Resources']},Mathematics:{icon:'Math',chapters:['Number Systems','Polynomials','Coordinate Geometry','Linear Equations in Two Variables','Introduction to Euclids Geometry','Lines and Angles','Triangles','Quadrilaterals','Areas of Parallelograms and Triangles','Circles','Constructions','Herons Formula','Surface Areas and Volumes','Statistics','Probability']},History:{icon:'Hist',chapters:['The French Revolution','Socialism in Europe and the Russian Revolution','Nazism and the Rise of Hitler','Forest Society and Colonialism','Pastoralists in the Modern World']},Geography:{icon:'Geo',chapters:['India Size and Location','Physical Features of India','Drainage','Climate','Natural Vegetation and Wild Life','Population']},Economics:{icon:'Eco',chapters:['The Story of Village Palampur','People as Resource','Poverty as a Challenge','Food Security in India']}},
+    '10':{Science:{icon:'Sci',chapters:['Chemical Reactions and Equations','Acids Bases and Salts','Metals and Non-metals','Carbon and its Compounds','Periodic Classification of Elements','Life Processes','Control and Coordination','How do Organisms Reproduce?','Heredity and Evolution','Light Reflection and Refraction','Human Eye and Colourful World','Electricity','Magnetic Effects of Electric Current','Sources of Energy','Our Environment','Management of Natural Resources']},Mathematics:{icon:'Math',chapters:['Real Numbers','Polynomials','Pair of Linear Equations','Quadratic Equations','Arithmetic Progressions','Triangles','Coordinate Geometry','Introduction to Trigonometry','Some Applications of Trigonometry','Circles','Constructions','Areas Related to Circles','Surface Areas and Volumes','Statistics','Probability']},History:{icon:'Hist',chapters:['The Rise of Nationalism in Europe','Nationalism in India','The Making of a Global World','The Age of Industrialisation','Print Culture and the Modern World']},Geography:{icon:'Geo',chapters:['Resources and Development','Forest and Wildlife Resources','Water Resources','Agriculture','Minerals and Energy Resources','Manufacturing Industries','Lifelines of National Economy']},Economics:{icon:'Eco',chapters:['Development','Sectors of the Indian Economy','Money and Credit','Globalisation and the Indian Economy','Consumer Rights']}},
+    '11':{Physics:{icon:'Phys',chapters:['Physical World','Units and Measurements','Motion in a Straight Line','Motion in a Plane','Laws of Motion','Work Energy and Power','Systems of Particles and Rotational Motion','Gravitation','Mechanical Properties of Solids','Mechanical Properties of Fluids','Thermal Properties of Matter','Thermodynamics','Kinetic Theory','Oscillations','Waves']},Chemistry:{icon:'Chem',chapters:['Some Basic Concepts of Chemistry','Structure of Atom','Classification of Elements','Chemical Bonding','States of Matter','Thermodynamics','Equilibrium','Redox Reactions','Hydrogen','The s-Block Elements','The p-Block Elements','Organic Chemistry Basic Principles','Hydrocarbons','Environmental Chemistry']},Biology:{icon:'Bio',chapters:['The Living World','Biological Classification','Plant Kingdom','Animal Kingdom','Morphology of Flowering Plants','Anatomy of Flowering Plants','Structural Organisation in Animals','Cell The Unit of Life','Biomolecules','Cell Cycle and Cell Division','Transport in Plants','Mineral Nutrition','Photosynthesis','Respiration in Plants','Plant Growth and Development','Digestion and Absorption','Breathing and Exchange of Gases','Body Fluids and Circulation','Excretory Products','Locomotion and Movement','Neural Control','Chemical Coordination']},Mathematics:{icon:'Math',chapters:['Sets','Relations and Functions','Trigonometric Functions','Mathematical Induction','Complex Numbers','Linear Inequalities','Permutations and Combinations','Binomial Theorem','Sequences and Series','Straight Lines','Conic Sections','3D Geometry','Limits and Derivatives','Mathematical Reasoning','Statistics','Probability']}},
+    '12':{Physics:{icon:'Phys',chapters:['Electric Charges and Fields','Electrostatic Potential','Current Electricity','Moving Charges and Magnetism','Magnetism and Matter','Electromagnetic Induction','Alternating Current','Electromagnetic Waves','Ray Optics','Wave Optics','Dual Nature of Radiation','Atoms','Nuclei','Semiconductor Electronics','Communication Systems']},Chemistry:{icon:'Chem',chapters:['The Solid State','Solutions','Electrochemistry','Chemical Kinetics','Surface Chemistry','General Principles of Isolation','The p-Block Elements','The d and f-Block Elements','Coordination Compounds','Haloalkanes and Haloarenes','Alcohols Phenols and Ethers','Aldehydes Ketones and Carboxylic Acids','Amines','Biomolecules','Polymers','Chemistry in Everyday Life']},Biology:{icon:'Bio',chapters:['Reproduction in Organisms','Sexual Reproduction in Flowering Plants','Human Reproduction','Reproductive Health','Principles of Inheritance','Molecular Basis of Inheritance','Evolution','Human Health and Disease','Strategies for Enhancement','Microbes in Human Welfare','Biotechnology Principles','Biotechnology Applications','Organisms and Populations','Ecosystem','Biodiversity','Environmental Issues']},Mathematics:{icon:'Math',chapters:['Relations and Functions','Inverse Trigonometric Functions','Matrices','Determinants','Continuity and Differentiability','Applications of Derivatives','Integrals','Applications of Integrals','Differential Equations','Vector Algebra','3D Geometry','Linear Programming','Probability']}}
+  }},
+  jee:{name:'JEE Preparation',icon:'JEE',classes:{JEE:{Physics:{icon:'Phys',chapters:['Mechanics','Kinematics','Laws of Motion','Work Energy Power','Rotation','Gravitation','SHM','Waves','Heat and Thermodynamics','Electrostatics','Current Electricity','Magnetic Effects','EMI and AC','Optics','Modern Physics','Semiconductors']},Chemistry:{icon:'Chem',chapters:['Atomic Structure','Chemical Bonding','States of Matter','Thermodynamics','Electrochemistry','Chemical Kinetics','Organic Chemistry Basics','Hydrocarbons','Aldehydes and Ketones','Amines','Polymers','Biomolecules','Coordination Chemistry','d-Block Elements']},Mathematics:{icon:'Math',chapters:['Sets and Functions','Algebra','Coordinate Geometry','Calculus','Vectors and 3D','Probability','Trigonometry','Matrices and Determinants','Sequences and Series','Limits and Continuity','Differential Equations','Complex Numbers']}}}},
+  neet:{name:'NEET Preparation',icon:'NEET',classes:{NEET:{Biology:{icon:'Bio',chapters:['Cell Biology','Genetics and Evolution','Human Physiology','Plant Physiology','Reproduction','Ecology','Biotechnology','Diversity in Living World','Structural Organisation','Biomolecules']},Physics:{icon:'Phys',chapters:['Mechanics','Thermodynamics','Optics','Electrostatics','Current Electricity','Magnetism','Modern Physics','Waves and Oscillations']},Chemistry:{icon:'Chem',chapters:['Basic Concepts','Atomic Structure','Chemical Bonding','Equilibrium','Electrochemistry','Organic Chemistry','Biomolecules','Polymers']}}}}
+};
+
+// ===
+//   PLANS CONFIG
+// ===
+var PLANS={
+  free:{name:'Freemium',price:0,color:'var(--fog)',features:['3 chapters per subject free','Basic flashcards & quiz','Limited AI (5 questions/day)','No streak bonuses'],limits:{chaptersPerSubject:3,aiQuestionsPerDay:500,tutorAccess:false,worksheetAccess:false}},
+  starter:{name:'Starter',price:299,color:'var(--blue)',features:['All chapters unlocked','Full flashcards & quiz','20 AI questions/day','AI Tutor access','Streak bonuses & XP'],limits:{chaptersPerSubject:999,aiQuestionsPerDay:20,tutorAccess:true,worksheetAccess:false}},
+  pro:{name:'Pro',price:499,color:'var(--violet)',features:['Everything in Starter','Unlimited AI questions','Worksheets & assignments','Teacher-generated content','Progress analytics','Parent reports'],limits:{chaptersPerSubject:999,aiQuestionsPerDay:999,tutorAccess:true,worksheetAccess:true}},
+  school:{name:'School',price:1999,color:'var(--gold)',features:['Everything in Pro','50 student accounts','Teacher portal full access','Admin dashboard','KYC verification','Priority support'],limits:{chaptersPerSubject:999,aiQuestionsPerDay:999,tutorAccess:true,worksheetAccess:true}}
+};
+
+// ===
+//   APP STATE
+// ===
+var S={
+  role:'',apiKey:'',plan:'free',
+  // student
+  name:'',phone:'',cls:'',board:'cbse',goal:'',
+  xp:0,streak:0,lastStudied:null,totalAiToday:0,lastAiDate:'',
+  progress:{},badges:[],
+  // current chapter
+  board_sel:'cbse',cls_sel:'',subject_sel:'',chapter_sel:'',chIdx:0,
+  chatHistory:[],diagAnswers:[],m5Step:0,
+  // teacher
+  tName:'',tPhone:'',tSchool:'',tSubjects:'',tClasses:'',
+  // parent
+  pName:'',pPhone:'',pChild:'',pChildCls:''
+};
+
+// ===
+//   STORAGE
+// ===
+function sv(){try{localStorage.setItem('mim3_s',JSON.stringify(S));}catch(e){}}
+function ld(){try{var d=localStorage.getItem('mim3_s');if(d){var p=JSON.parse(d);for(var k in p)S[k]=p[k];}}catch(e){}}
+
+// ===
+//   CLAUDE API (NO async/await)
+// ===
+function callAI(sys,msgs,onDone,onErr){
+  // API key handled by proxy — no check needed
+  // Check daily limit
+  var today=new Date().toDateString();
+  if(S.lastAiDate!==today){S.totalAiToday=0;S.lastAiDate=today;}
+  var limit=PLANS[S.plan].limits.aiQuestionsPerDay;
+  if(S.totalAiToday>=limit){
+    var msg='Daily AI limit reached ('+limit+' questions). <a onclick="showPlans()" style="color:var(--gold);font-weight:700">Upgrade to Pro -></a>';
+    if(onErr)onErr(msg);
+    return;
+  }
+  S.totalAiToday++;sv();
+  // Use Cloudflare proxy — no API key needed from students
+  var PROXY='https://bold-block-7e86.minutemastersindia.workers.dev';
+  fetch(PROXY,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:1800,system:sys,messages:msgs})
+  })
+  .then(function(r){
+    if(!r.ok){return r.json().catch(function(){return {error:{message:'HTTP '+r.status+' - Check your API key is valid'}};});}
+    return r.json();
+  })
+  .then(function(d){
+    if(d.error){if(onErr)onErr(d.error.message);else toast('(!) '+d.error.message);return;}
+    var t='';if(d.content)for(var i=0;i<d.content.length;i++)if(d.content[i].text)t+=d.content[i].text;
+    if(onDone)onDone(t);
+  })
+  .catch(function(e){
+    console.error('MiM API error:',e);
+    if(onErr)onErr('Network error: '+e.message+'. Check your connection and API key.');
+  });
+}
+function ask(sys,msg,done,err){callAI(sys,[{role:'user',content:msg}],done,err);}
+
+// ===
+//   MARKDOWN
+// ===
+function md(t){
+  if(!t)return '';
+  return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/^### (.+)$/gm,'<h5>$1</h5>')
+    .replace(/^## (.+)$/gm,'<h4>$1</h4>')
+    .replace(/^# (.+)$/gm,'<h3>$1</h3>')
+    .replace(/^- (.+)$/gm,'<li>$1</li>')
+    .replace(/^(\d+)\. (.+)$/gm,'<li>$2</li>')
+    .replace(/(<li>[^<]*<\/li>(\n|$))+/g,function(m){return '<ul>'+m+'</ul>';})
+    .replace(/\n\n+/g,'</p><p>')
+    .replace(/^(?!<[hup]|$)(.+)/gm,'<p>$1</p>')
+    .replace(/<p><\/p>/g,'');
+}
+
+// ===
+//   UI HELPERS
+// ===
+var _tt=null;
+function toast(msg){var el=document.getElementById('toast');if(!el)return;el.innerHTML=msg;el.classList.add('on');if(_tt)clearTimeout(_tt);_tt=setTimeout(function(){el.classList.remove('on');},3000);}
+function showLoading(id,msg){var el=document.getElementById(id);if(el)el.innerHTML='<div class="loading-state"><div class="spin"></div><span class="pulse">'+(msg||'AI thinking...')+'</span></div>';}
+function showErr(id,msg){
+  var el=document.getElementById(id);
+  if(el)el.innerHTML='<div style="background:rgba(239,68,68,.08);border:1.5px solid rgba(239,68,68,.3);border-radius:14px;padding:18px">'
+    +'<div style="font-size:14px;font-weight:700;color:#fca5a5;margin-bottom:8px">(!) Something went wrong</div>'
+    +'<div style="font-size:13px;color:var(--sub);margin-bottom:14px;line-height:1.6">'+msg+'</div>'
+    +'<div style="display:flex;gap:8px">'
+    +'<button class="btn btn-secondary btn-sm" onclick="retryLast()">Try Again</button>'
+    +'<button class="btn btn-secondary btn-sm" onclick="go(\'apikey\')">Check API Key</button>'
+    +'</div></div>';
+}
+function showModal(html){document.getElementById('modal-content').innerHTML=html;document.getElementById('modal-overlay').classList.add('on');}
+function hideModal(){document.getElementById('modal-overlay').classList.remove('on');}
+var _lastRetry=null;
+function retryLast(){if(_lastRetry)_lastRetry();}
+
+// ===
+//   SCREEN ROUTER
+// ===
+function showScreen(id){
+  var all=document.querySelectorAll('.screen');
+  for(var i=0;i<all.length;i++)all[i].classList.remove('on');
+  var sc=document.getElementById('sc-'+id);
+  if(!sc){console.error('No screen: sc-'+id);return;}
+  sc.classList.add('on');
+  sc.scrollTop=0;
+}
+
+function go(page){
+  // Update bottom nav
+  document.querySelectorAll('.bnav-btn').forEach(function(b){b.classList.toggle('on',b.dataset&&b.dataset.pg===page);});
+  var fn=window['render_'+page.replace(/-/g,'_')];
+  showScreen(page);
+  if(fn)fn();
+}
+
+// ===
+//   XP & GAMIFICATION
+// ===
+var XP_LEVELS=[0,100,250,450,700,1000,1400,1900,2500,3200,4000];
+var BADGE_DEFS=[
+  {id:'first_chapter',icon:'*',name:'First Step',desc:'Complete your first chapter',xp:50},
+  {id:'streak_3',icon:'[fire]',name:'On Fire',desc:'3-day streak',xp:75},
+  {id:'streak_7',icon:'[xp]',name:'Lightning',desc:'7-day streak',xp:150},
+  {id:'perfect_quiz',icon:'100',name:'Perfect Score',desc:'100% on a quiz',xp:100},
+  {id:'five_chapters',icon:'[books]',name:'Bookworm',desc:'Complete 5 chapters',xp:200},
+  {id:'bloom_master',icon:'BM',name:'Bloom Master',desc:'Use Bloom learning on 3 chapters',xp:100},
+  {id:'mindful',icon:'ZZ',name:'Mindful Learner',desc:'Complete 3 mindfulness sessions',xp:75},
+  {id:'early_bird',icon:'EB',name:'Early Bird',desc:'Study before 8am',xp:50}
+];
+
+function addXP(pts,reason){
+  S.xp+=pts;sv();
+  toast('[xp] +'+pts+' XP - '+reason+'!');
+  checkBadges();
+  updateXPBar();
+}
+
+function getLevel(){for(var i=XP_LEVELS.length-1;i>=0;i--)if(S.xp>=XP_LEVELS[i])return i+1;return 1;}
+
+function updateXPBar(){
+  var lv=getLevel();var cur=XP_LEVELS[lv-1]||0;var next=XP_LEVELS[lv]||S.xp+100;
+  var pct=Math.min(100,Math.round((S.xp-cur)/(next-cur)*100));
+  var bar=document.getElementById('home-xp-bar');if(bar)bar.style.width=pct+'%';
+  var lbl=document.getElementById('home-level');if(lbl)lbl.textContent=lv;
+  var xpEl=document.getElementById('home-xp');if(xpEl)xpEl.textContent=S.xp+' XP';
+  var xpLbl=document.getElementById('home-xp-label');if(xpLbl)xpLbl.textContent=S.xp+' / '+next+' XP';
+  var nxt=document.getElementById('home-xp-next');if(nxt)nxt.textContent=(next-S.xp)+' XP to Level '+(lv+1);
+}
+
+function earnBadge(id){
+  if(S.badges.indexOf(id)>=0)return;
+  S.badges.push(id);sv();
+  var def=BADGE_DEFS.filter(function(b){return b.id===id;})[0];
+  if(def){toast(def.icon+' Badge Earned: '+def.name+'!');addXP(def.xp,'Badge: '+def.name);}
+}
+
+function checkBadges(){
+  var done=Object.keys(S.progress).length;
+  if(done>=1)earnBadge('first_chapter');
+  if(done>=5)earnBadge('five_chapters');
+  if(S.streak>=3)earnBadge('streak_3');
+  if(S.streak>=7)earnBadge('streak_7');
+  // Check perfect quiz
+  var scores=Object.values(S.progress).map(function(p){return p.score||0;});
+  if(scores.indexOf(100)>=0)earnBadge('perfect_quiz');
+}
+
+// ===
+//   STREAK
+// ===
+function checkStreak(){
+  var today=new Date().toDateString();
+  if(S.lastStudied===today)return;
+  var yday=new Date(Date.now()-86400000).toDateString();
+  S.streak=S.lastStudied===yday?(S.streak+1):1;
+  S.lastStudied=today;sv();
+  if(S.streak>1)toast('[fire] '+S.streak+'-day streak! Keep it going!');
+}
+
+// ===
+//   CHAPTER ACCESS CHECK (Freemium)
+// ===
+function canAccessChapter(subjKey,chIdx){
+  if(S.plan!=='free')return true;
+  var limit=PLANS.free.limits.chaptersPerSubject;
+  return chIdx<limit;
+}
+
+function pgKey(b,c,s,i){return [b,c,s,i].join('_');}
+function isDone(b,c,s,i){var k=pgKey(b,c,s,i);return S.progress[k]&&S.progress[k].done;}
+
+// ===
+//   ONBOARDING FLOWS
+// ===
+function selectRole(role){
+  S.role=role;sv();
+  if(role==='student')showScreen('register-student');
+  else if(role==='teacher')showScreen('register-teacher');
+  else showScreen('register-parent');
+}
+
+function registerStudent(){
+  var name=document.getElementById('s-name').value.trim();
+  var phone=document.getElementById('s-phone').value.trim();
+  var cls=document.getElementById('s-class').value;
+  var board=document.getElementById('s-board').value;
+  var goal=document.getElementById('s-goal').value.trim();
+  if(!name){toast('Please enter your name');return;}
+  if(!phone||phone.length<10){toast('Enter a valid 10-digit number');return;}
+  if(!cls){toast('Please select your class');return;}
+  S.name=name;S.phone=phone;S.cls=cls;S.board=board;S.goal=goal||'Master my syllabus';
+  S.board_sel=board;S.cls_sel=cls;
+  sv();showScreen('apikey');
+}
+
+function registerTeacher(){
+  var n=document.getElementById('t-name').value.trim();
+  var ph=document.getElementById('t-phone').value.trim();
+  var sc=document.getElementById('t-school').value.trim();
+  if(!n||!ph){toast('Please enter name and phone');return;}
+  S.tName=n;S.tPhone=ph;S.tSchool=sc||'';
+  S.tSubjects=document.getElementById('t-subjects').value;
+  S.tClasses=document.getElementById('t-classes').value;
+  sv();showScreen('apikey');
+}
+
+function registerParent(){
+  var n=document.getElementById('p-name').value.trim();
+  var ph=document.getElementById('p-phone').value.trim();
+  var child=document.getElementById('p-child').value.trim();
+  if(!n||!ph){toast('Please enter name and phone');return;}
+  S.pName=n;S.pPhone=ph;S.pChild=child;
+  S.pChildCls=document.getElementById('p-class').value;
+  sv();showScreen('apikey');
+}
+
+function updateApiBanner(){
+  var b=document.getElementById('home-api-banner');
+  if(!b)return;
+  if(S.apiKey){b.style.display='none';}
+  else{b.style.display='block';}
+}
+function saveApiKey(){
+  // With proxy, API key is optional - just launch app
+  launchApp();
+  return;
+  var k=document.getElementById('api-inp').value.trim();
+  if(!k){toast('Please paste your API key');return;}
+  S.apiKey=k;
+  S.totalAiToday=0;
+  S.lastAiDate='';
+  sv();
+  toast('AI activated! All features unlocked.');
+  updateApiBanner();
+  launchApp();
+}
+
+function skipApiKey(){
+  toast('Limited features mode. Add API key anytime in Profile.');
+  launchApp();
+}
+
+function launchApp(){
+  if(S.role==='student'&&!S.seen5M){
+    showScreen('role');
+    show5MIntro();
+    return;
+  }
+  if(S.role==='student'){go('home');}
+  else if(S.role==='teacher'){render_teacher_home();showScreen('teacher-home');}
+  else{render_parent_home();showScreen('parent-home');}
+}
+
+function show5MIntro(){
+  var m=document.getElementById('modal-5m');
+  if(m){m.style.display='flex';}
+}
+function close5MIntro(){
+  var m=document.getElementById('modal-5m');
+  if(m){m.style.display='none';}
+  S.seen5M=true;sv();
+  if(S.role==='student'){render_home();showScreen('home');}
+  else if(S.role==='teacher'){render_teacher_home();showScreen('teacher-home');}
+  else{render_parent_home();showScreen('parent-home');}
+}
+
+
+function switchUser(){
+  S.role='';sv();
+  showScreen('role');
+}
+
+// ===
+//   RENDER: HOME
+// ===
+function render_home(){
+  updateApiBanner();
+  checkStreak();
+  var hr=new Date().getHours();
+  var greet=(hr<12?'Good morning 5':hr<17?'Good afternoon ':'Good evening 9')+', '+S.name.split(' ')[0]+'!';
+  var el=document.getElementById('home-greeting');if(el)el.textContent=greet;
+  var gl=document.getElementById('home-goal-display');if(gl)gl.textContent='Goal: '+S.goal;
+  var st=document.getElementById('home-streak');if(st)st.textContent=S.streak||0;
+  var st2=document.getElementById('home-streak2');if(st2)st2.textContent=S.streak||0;
+  var done=Object.keys(S.progress).length;
+  var dn=document.getElementById('home-done');if(dn)dn.textContent=done;
+  var scores=Object.values(S.progress).map(function(p){return p.score||0;});
+  var avg=scores.length?Math.round(scores.reduce(function(a,b){return a+b;},0)/scores.length):0;
+  var av=document.getElementById('home-avg');if(av)av.textContent=scores.length?(avg+'%'):'-';
+  updateXPBar();
+  // Daily progress
+  var today=new Date().toDateString();
+  var todayDone=Object.values(S.progress).filter(function(p){return p.ts&&new Date(p.ts).toDateString()===today;}).length;
+  var dp=document.getElementById('daily-prog');if(dp)dp.style.width=Math.min(100,todayDone*100)+'%';
+  var dt=document.getElementById('daily-prog-text');if(dt)dt.textContent=todayDone+' / 1 chapters today';
+  var ds=document.getElementById('daily-status');if(ds)ds.textContent=todayDone>=1?'[OK] Done!':'In Progress';
+  var pb=document.getElementById('home-plan-badge');if(pb)pb.textContent=PLANS[S.plan].name;
+  // Recent
+  var keys=Object.keys(S.progress).slice(-4).reverse();
+  var html='';
+  keys.forEach(function(key){
+    var pts=key.split('_'),b=pts[0],c=pts[1],sub=pts[2],i=parseInt(pts[3]);
+    var bd=CUR[b];if(!bd)return;var cd=bd.classes[c];if(!cd||!cd[sub])return;
+    var ch=cd[sub].chapters[i]||'Chapter';var p=S.progress[key];
+    html+='<div class="ch-row" onclick="openChapter(\''+b+'\',\''+c+'\',\''+sub+'\','+i+',\''+esc(ch)+'\')">' +
+      '<div class="ch-num done">OK</div>' +
+      '<div class="f1"><div style="font-size:14px;font-weight:600;margin-bottom:2px">'+ch+'</div>' +
+      '<div class="xs fog">'+sub+'  -  Class '+c+'</div></div>' +
+      '<span class="badge b-green">'+(p.score||0)+'%</span></div>';
+  });
+  var hr2=document.getElementById('home-recent');
+  if(hr2)hr2.innerHTML=html||'<div class="empty"><span class="empty-icon">6</span><div class="empty-ttl">Start your first chapter</div><div class="sm fog">Tap "Continue Learning" above</div></div>';
+  // Badges
+  var bhtml='';
+  BADGE_DEFS.forEach(function(b){
+    var earned=S.badges.indexOf(b.id)>=0;
+    bhtml+='<div class="badge-item'+(earned?' earned':'')+'" title="'+b.desc+'"><span class="badge-icon" style="opacity:'+(earned?1:.3)+'">'+b.icon+'</span><span style="color:'+(earned?'var(--gold)':'var(--fog)')+'">'+b.name+'</span></div>';
+  });
+  var hb=document.getElementById('home-badges');if(hb)hb.innerHTML=bhtml;
+}
+
+// ===
+//   RENDER: BOARDS
+// ===
+function render_boards(){
+  var bp=document.getElementById('boards-plan');if(bp)bp.textContent=PLANS[S.plan].name;
+  var html='';
+  Object.keys(CUR).forEach(function(bk){
+    var b=CUR[bk];var cls=Object.keys(b.classes);
+    var bIcons={'CBSE':'CBSE','JEE':'JEE','NEET':'NEET'};
+    var bColors={'CBSE':'#3b82f6','JEE':'#ef4444','NEET':'#22c55e'};
+    var bIcon=bIcons[b.icon]||b.icon;var bColor=bColors[b.icon]||'#3b82f6';
+    html+='<div class="card mb12" onclick="selectBoard(\''+bk+'\')" style="cursor:pointer">' +
+      '<div class="row gap12 mb10">' +
+      '<div style="width:48px;height:48px;border-radius:13px;background:'+bColor+'22;border:1.5px solid '+bColor+'44;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:'+bColor+';flex-shrink:0">'+bIcon+'</div>' +
+      '<div><div class="h3">'+b.name+'</div><div class="xs fog">'+cls.join(', ')+'</div></div></div>' +
+      '<div class="row gap6 wrap">'+cls.map(function(c){return '<span class="badge b-blue">Class '+c+'</span>';}).join('')+'</div></div>';
+  });
+  document.getElementById('boards-list').innerHTML=html;
+}
+
+function selectBoard(bk){
+  S.board_sel=bk;sv();
+  var cls=Object.keys(CUR[bk].classes);
+  if(cls.length===1){S.cls_sel=cls[0];sv();render_subjects();showScreen('subjects');}
+  else showModal('<div class="h3 mb16">Select Class</div><div class="col gap8">'+cls.map(function(c){return '<button class="btn btn-secondary btn-full" onclick="S.cls_sel=\''+c+'\';sv();hideModal();render_subjects();showScreen(\'subjects\')" style="font-size:16px;padding:16px">Class '+c+'</button>';}).join('')+'</div>');
+}
+
+// ===
+//   RENDER: SUBJECTS
+// ===
+function render_subjects(){
+  var b=CUR[S.board_sel];var cd=b.classes[S.cls_sel];
+  var el=document.getElementById('subjects-title');if(el)el.textContent=b.name+'  -  Class '+S.cls_sel;
+  var html='<div class="g2">';
+  Object.keys(cd).forEach(function(s){
+    var sub=cd[s];
+    var done=sub.chapters.filter(function(ch,i){return isDone(S.board_sel,S.cls_sel,s,i);}).length;
+    var pct=Math.round(done/sub.chapters.length*100);
+    var ICON_COLOR={'Sci':'#22c55e','Math':'#3b82f6','Hist':'#f59e0b','Geo':'#06b6d4','Eco':'#8b5cf6','Phys':'#6366f1','Chem':'#ec4899','Bio':'#10b981'};
+    var ICON_DISP={'Sci':'SCI','Math':'MATH','Hist':'HIST','Geo':'GEO','Eco':'ECO','Phys':'PHY','Chem':'CHEM','Bio':'BIO'};
+    var ic=sub.icon;
+    var icColor=ICON_COLOR[ic]||'#3b82f6';
+    var icLabel=ICON_DISP[ic]||ic||s.substring(0,3).toUpperCase();
+    html+='<div class="subj-card" onclick="S.subject_sel=\''+s+'\';sv();render_chapters();showScreen(\'chapters\')">' +
+      '<div style="width:54px;height:54px;border-radius:14px;background:'+icColor+'22;border:2px solid '+icColor+'44;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:'+icColor+';margin:0 auto 10px;letter-spacing:.03em">'+icLabel+'</div>' +
+      '<div style="font-size:14px;font-weight:700;margin-bottom:3px">'+s+'</div>' +
+      '<div class="xs fog mb8">'+sub.chapters.length+' chapters</div>' +
+      (pct>0?'<div class="prog mb4"><div class="prog-fill" style="width:'+pct+'%"></div></div><div class="xs fog">'+pct+'% done</div>':'') +
+      '</div>';
+  });
+  html+='</div>';
+  document.getElementById('subjects-grid').innerHTML=html;
+}
+
+// ===
+//   RENDER: CHAPTERS
+// ===
+function render_chapters(){
+  var b=CUR[S.board_sel];var sub=b.classes[S.cls_sel][S.subject_sel];
+  var el=document.getElementById('chapters-title');if(el)el.textContent=S.subject_sel;
+  var sub2=document.getElementById('chapters-sub');if(sub2)sub2.textContent=b.name+'  -  Class '+S.cls_sel;
+  var done=sub.chapters.filter(function(ch,i){return isDone(S.board_sel,S.cls_sel,S.subject_sel,i);}).length;
+  var db=document.getElementById('chapters-done-badge');
+  if(db){db.textContent=done+'/'+sub.chapters.length+' done';db.style.display=done>0?'inline-flex':'none';}
+  var html='';
+  sub.chapters.forEach(function(ch,i){
+    var done2=isDone(S.board_sel,S.cls_sel,S.subject_sel,i);
+    var p=S.progress[pgKey(S.board_sel,S.cls_sel,S.subject_sel,i)];
+    var locked=!canAccessChapter(S.subject_sel,i);
+    var eta=Math.ceil(ch.split(' ').length/50+3);// rough 5-10 min estimate
+    html+='<div class="ch-row" onclick="'+(locked?'showUpgrade()':'openChapter(\''+S.board_sel+'\',\''+S.cls_sel+'\',\''+S.subject_sel+'\','+i+',\''+esc(ch)+'\')')+'">' +
+      '<div class="ch-num'+(done2?' done':locked?' locked':'')+'>'+(done2?'✓':locked?'🔒':(i+1))+'</div>' +
+      '<div class="f1">' +
+        '<div style="font-size:14px;font-weight:600;margin-bottom:2px">'+ch+'</div>' +
+        '<div class="xs fog row gap8"><span> ~'+eta+' min</span>'+(done2?'<span class="g">Completed  -  '+(p.score||0)+'%</span>':'<span>~'+ eta +' min read</span>')+'</div>' +
+      '</div>' +
+      (done2?'<span class="badge b-green">'+(p.score||0)+'%</span>':locked?'<span class="badge b-amber">Upgrade</span>':'<span style="color:var(--fog);font-size:20px">></span>') +
+      '</div>';
+  });
+  document.getElementById('chapters-list').innerHTML=html;
+}
+
+function openChapter(b,c,s,i,ch){
+  if(!canAccessChapter(s,i)){showUpgrade();return;}
+  S.board_sel=b;S.cls_sel=c;S.subject_sel=s;S.chIdx=i;S.chapter_sel=ch;
+  S.chatHistory=[];S.diagAnswers=[];S.m5Step=0;
+  _snapData=null;_radarData=null;_m5Data={};_m5CardIdx=0;_m5Flipped=false;sv();
+  // Run diagnostic first
+  render_diagnostic();showScreen('diagnostic');
+}
+
+// ===
+//   DIAGNOSTIC (pre-chapter)
+// ===
+function render_diagnostic(){
+  var el=document.getElementById('diag-chapter');if(el)el.textContent=S.chapter_sel;
+  showLoading('diag-area','Preparing your diagnostic...');
+  var sys='You create 2 short diagnostic questions for Indian NCERT students. Return ONLY a JSON array: [{"q":"question","type":"mcq","opts":["A","B","C","D"],"ans":0},{"q":"open-ended question","type":"open"}]. First question MCQ, second open-ended.';
+  var msg='Chapter: "'+S.chapter_sel+'", Subject: '+S.subject_sel+', Class: '+S.cls_sel+' CBSE NCERT. Create 2 diagnostic questions to check prior knowledge.';
+  _lastRetry=render_diagnostic;
+  ask(sys,msg,
+    function(txt){
+      try{
+        var clean=txt.replace(/```json/g,'').replace(/```/g,'').trim();
+        var m=clean.match(/\[[\s\S]*?\]/);
+        var qs=JSON.parse(m[0]);
+        renderDiagQ(qs,0,{});
+      }catch(e){
+        // Fallback if AI fails
+        renderDiagFallback();
+      }
+    },
+    function(){renderDiagFallback();}
+  );
+}
+
+function renderDiagFallback(){
+  var html='<div class="card2 mb12"><div class="sm sub lh">We couldn\'t load a personalized diagnostic right now, but that\'s okay! Let\'s get started with <strong>'+S.chapter_sel+'</strong>.</div></div>'+
+    '<button class="btn btn-primary btn-full" onclick="startChapter(50)">Start Learning with 5M -></button>';
+  document.getElementById('diag-area').innerHTML=html;
+}
+
+function renderDiagQ(qs,idx,answers){
+  if(idx>=qs.length){
+    // Calculate prior knowledge score
+    var score=50;// default mid
+    document.getElementById('diag-area').innerHTML=
+      '<div class="card mb12" style="background:linear-gradient(135deg,rgba(34,197,94,.08),rgba(6,182,212,.05));border-color:rgba(34,197,94,.2)">'+
+      '<div style="font-size:28px;margin-bottom:8px">[OK]</div>'+
+      '<div class="h3 mb6">Diagnostic Complete!</div>'+
+      '<div class="sm sub lh">I\'ve understood your current level. Your personalised lesson for <strong>'+S.chapter_sel+'</strong> is ready.</div></div>'+
+      '<button class="btn btn-primary btn-full" onclick="startChapter('+score+')">Start Learning -></button>';
+    return;
+  }
+  var q=qs[idx];
+  var html='<div class="diag-card"><div class="xs fog mb8">QUESTION '+(idx+1)+' OF '+qs.length+'</div>'+
+    '<div style="font-size:15px;font-weight:600;line-height:1.5;margin-bottom:16px">'+q.q+'</div>';
+  if(q.type==='mcq'&&q.opts){
+    q.opts.forEach(function(opt,oi){
+      html+='<button class="qopt" onclick="diagAnswer('+JSON.stringify(qs)+','+idx+','+JSON.stringify(answers)+','+oi+',\''+esc(q.q)+'\')">' +
+        '<div class="qdot">'+String.fromCharCode(65+oi)+'</div><span>'+opt+'</span></button>';
+    });
+  } else {
+    html+='<div class="sm sub mb12 lh" style="background:rgba(99,102,241,.06);border-radius:10px;padding:12px;border:1px solid rgba(99,102,241,.15)">D <em>Think about this before typing. What do you already know?</em></div>'+
+      '<textarea class="inp textarea" id="diag-open-'+idx+'" placeholder="Write your answer here..." style="min-height:80px;resize:none"></textarea>'+
+      '<button class="btn btn-primary btn-full mt10" onclick="diagOpenAnswer('+JSON.stringify(qs)+','+idx+','+JSON.stringify(answers)+')">Submit Answer -></button>';
+  }
+  html+='</div>';
+  document.getElementById('diag-area').innerHTML=html;
+}
+
+function diagAnswer(qs,idx,answers,chosen,q){
+  answers[idx]=chosen;
+  renderDiagQ(qs,idx+1,answers);
+}
+
+function diagOpenAnswer(qs,idx,answers){
+  var inp=document.getElementById('diag-open-'+idx);
+  var ans=inp?inp.value.trim():'';
+  answers[idx]=ans;
+  renderDiagQ(qs,idx+1,answers);
+}
+
+// ===
+//   5M FRAMEWORK CHAPTER
+// ===
+function startChapter(priorScore){
+  S.m5Step=0;_m5CardIdx=0;_m5Flipped=false;sv();checkStreak();
+  render_chapter_page();showScreen('chapter');
+  switchTab('snapshot');
+}
+
+function render_chapter_page(){
+  var el=document.getElementById('ch-title');if(el)el.textContent=S.chapter_sel;
+  var sb=document.getElementById('ch-sub');if(sb)sb.textContent=CUR[S.board_sel].name+'  -  '+S.subject_sel+'  -  Class '+S.cls_sel;
+  var done=isDone(S.board_sel,S.cls_sel,S.subject_sel,S.chIdx);
+  var p=S.progress[pgKey(S.board_sel,S.cls_sel,S.subject_sel,S.chIdx)];
+  var cs=document.getElementById('ch-status');
+  var words=S.chapter_sel.split(' ').length;
+  var mins=Math.max(8,Math.min(15,words*2+6));
+  if(cs)cs.innerHTML=done?'<span class="badge b-green">&#10003; '+(p.score||0)+'%</span>':'<span style="background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.3);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:800;color:#93c5fd">&#9203; '+mins+' min</span>';
+}
+
+var M5_STEPS=[
+  {key:'micro',label:'The Concept',icon:'&#128161;',color:'#3b82f6',tag:'Core Idea',cls:'m5-1'},
+  {key:'mindmap',label:'Visual Map',icon:'&#128336;',color:'#8b5cf6',tag:'Connections',cls:'m5-2'},
+  {key:'memory',label:'Remember This',icon:'&#129504;',color:'#22c55e',tag:'Memory Hook',cls:'m5-3'},
+  {key:'mistake',label:'Watch Out',icon:'&#9888;',color:'#f59e0b',tag:'Exam Traps',cls:'m5-4'},
+  {key:'mindful',label:'Real World',icon:'&#127757;',color:'#06b6d4',tag:'Reflect',cls:'m5-5'}
+];
+
+function renderM5Dots(){
+  var dots='';
+  M5_STEPS.forEach(function(s,i){
+    var done2=i<S.m5Step;var active=i===S.m5Step;
+    dots+='<div style="flex:1;height:4px;border-radius:99px;background:'+(done2?s.color:active?s.color+'80':'rgba(255,255,255,.06)')+';transition:background .4s" title="'+s.label+'"></div>';
+  });
+  var d=document.getElementById('m5-dots');if(d)d.innerHTML=dots;
+  var pl=document.getElementById('m5-step-label');if(pl)pl.textContent='Step '+(S.m5Step+1)+'/5: '+M5_STEPS[Math.min(S.m5Step,4)].label;
+  var bar=document.getElementById('m5-prog');if(bar)bar.style.width=(Math.min(S.m5Step+1,5)/5*100)+'%';
+}
+
+function load5M(){
+  showLoading('learn-area','Loading your 5M session for '+S.chapter_sel+'...');
+  var sys='You are a flashcard creator for Indian NCERT/CBSE students. Each card = ONE idea, max 2 short sentences. Return ONLY valid JSON:\n{\n  "micro": ["Core idea 1 in simple English.","Core idea 2.","Core idea 3.","Core idea 4.","Core idea 5."],\n  "mindmap": {"topic":"CHAPTER NAME","branches":[{"label":"Branch 1","points":["sub-point","sub-point"]},{"label":"Branch 2","points":["sub-point","sub-point"]},{"label":"Branch 3","points":["sub-point","sub-point"]},{"label":"Branch 4","points":["sub-point","sub-point"]}]},\n  "memory": ["Acronym or rhyme to remember key term 1.","Memory trick 2.","Memory trick 3."],\n  "mistake": ["WRONG: common mistake. RIGHT: correct understanding.","WRONG: another mistake. RIGHT: correct.","WRONG: trap question. RIGHT: correct."],\n  "mindful": ["Real world example from daily Indian life.","How this helps in real life.","One thing to reflect on."]\n}\nRULES: Each string = max 25 words. Simple vocabulary. No markdown inside strings. No long paragraphs ever.';
+  var msg='Chapter: "'+S.chapter_sel+'"\nSubject: '+S.subject_sel+'\nClass: '+S.cls_sel+' CBSE NCERT\n\nGenerate all 5M sections.';
+  _lastRetry=load5M;
+  ask(sys,msg,
+    function(txt){
+      try{
+        var clean=txt.replace(/```json\n?/g,'').replace(/```\n?/g,'').trim();
+        var obj=JSON.parse(clean);
+        render5M(obj);
+      }catch(e){
+        // Try to extract from markdown
+        render5MFallback(txt);
+      }
+    },
+    function(err){
+      document.getElementById('learn-area').innerHTML='<div class="ai-out" style="border-color:rgba(239,68,68,.3)"><span style="color:#fca5a5">(!) '+err+'</span><br><br><button class="btn btn-secondary btn-sm mt8" onclick="load5M()">Try Again</button></div>';
+    }
+  );
+}
+
+function render5MFallback(raw){
+  // If JSON fails, just render the raw response nicely
+  document.getElementById('learn-area').innerHTML=
+    '<div class="m5-step m5-1 mb12"><div class="m5-label" style="color:#93c5fd">1 <span>MICRO CONCEPT</span></div><div class="ai-out" style="background:transparent;border:none;padding:0">'+md(raw)+'</div></div>'+
+    '<div class="row gap8 mt16">'+
+    '<button class="btn btn-secondary f1" onclick="prevM5()" disabled><- Prev</button>'+
+    '<button class="btn btn-primary f1" onclick="nextM5()">Next Step -></button>'+
+    '</div>';
+}
+
+var _m5Data={};
+function render5M(data){
+  // Normalise values to arrays
+  _m5Data={};
+  var keys=['micro','memory','mistake','mindful'];
+  keys.forEach(function(k){
+    if(Array.isArray(data[k])) _m5Data[k]=data[k];
+    else if(typeof data[k]==='string'){
+      var pts=data[k].split('\n').map(function(l){return l.replace(/^[*\-\d.]+\s*/,'').trim();}).filter(function(l){return l.length>5;});
+      _m5Data[k]=pts.length?pts:[data[k]];
+    } else _m5Data[k]=['Content loading...'];
+  });
+  if(data.mindmap&&typeof data.mindmap==='object'&&data.mindmap.branches){
+    _m5Data.mindmap=data.mindmap;
+  } else if(typeof data.mindmap==='string'){
+    var raw=data.mindmap;
+    var mlines=raw.split('\n').filter(function(l){return l.trim().length>2;});
+    var branches=[];var cur=null;
+    mlines.forEach(function(l){
+      var indent=l.match(/^(\s*)/)[1].length;
+      var t=l.replace(/^[\s|\-├└─]+/,'').trim().replace(/^[*\-]+\s*/,'');
+      if(!t)return;
+      if(indent<4){if(cur)branches.push(cur);cur={label:t,points:[]};}
+      else if(cur){cur.points.push(t);}
+    });
+    if(cur)branches.push(cur);
+    _m5Data.mindmap={topic:S.chapter_sel,branches:branches.slice(0,6)};
+  } else {
+    _m5Data.mindmap={topic:S.chapter_sel,branches:[{label:'Key Concepts',points:['See other sections']}]};
+  }
+  S.m5Step=0;sv();
+  renderM5Step();
+}
+
+function renderM5Step(){
+  var step=M5_STEPS[Math.min(S.m5Step,4)];
+  var isLast=S.m5Step>=4;
+  var readMins=[2,3,1,2,1];
+
+  // Progress dots
+  var dots='';
+  M5_STEPS.forEach(function(st,i){
+    dots+='<div style="width:'+(i===S.m5Step?'22':'8')+'px;height:8px;border-radius:99px;background:'+(i<S.m5Step?st.color+'cc':i===S.m5Step?st.color:'rgba(255,255,255,.1)')+';transition:all .3s;cursor:pointer" onclick="jumpM5('+i+')"></div>';
+  });
+
+  var html='<div style="display:flex;gap:5px;justify-content:center;margin-bottom:14px">'+dots+'</div>';
+
+  // ── MINDMAP: special visual render ──────────────────────────────────────────
+  if(step.key==='mindmap'){
+    var mm=_m5Data.mindmap||{topic:S.chapter_sel,branches:[]};
+    html+=
+      '<div style="background:linear-gradient(135deg,#1e1040,#150d35);border:1.5px solid rgba(139,92,246,.35);border-radius:18px;padding:18px;margin-bottom:14px">'+
+        '<div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">'+
+          '<div style="width:36px;height:36px;border-radius:10px;background:rgba(139,92,246,.25);border:1px solid rgba(139,92,246,.4);display:flex;align-items:center;justify-content:center;font-size:17px">&#128336;</div>'+
+          '<div>'+
+            '<div style="font-size:10px;font-weight:800;letter-spacing:.1em;color:#a78bfa;text-transform:uppercase">CONNECTIONS</div>'+
+            '<div style="font-size:17px;font-weight:800;color:var(--white)">Visual Map</div>'+
+          '</div>'+
+          '<div style="margin-left:auto;font-size:11px;color:#a78bfa99;font-weight:700">'+readMins[1]+' min &#183; 2/5</div>'+
+        '</div>'+
+        // Central topic bubble
+        '<div style="text-align:center;margin-bottom:18px">'+
+          '<div style="display:inline-block;background:linear-gradient(135deg,#7c3aed,#4f46e5);border-radius:50px;padding:10px 20px;font-size:13px;font-weight:800;color:#fff;letter-spacing:.02em;box-shadow:0 4px 20px rgba(139,92,246,.4)">'+mm.topic+'</div>'+
+        '</div>'+
+        // Branches
+        '<div style="display:flex;flex-direction:column;gap:10px">';
+    var branchColors=['#3b82f6','#22c55e','#f59e0b','#ec4899','#06b6d4','#8b5cf6'];
+    (mm.branches||[]).forEach(function(br,bi){
+      var bc=branchColors[bi%branchColors.length];
+      html+=
+        '<div style="background:'+bc+'11;border:1px solid '+bc+'30;border-radius:13px;padding:12px 14px;position:relative;padding-left:18px">'+
+          '<div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:'+bc+';border-radius:4px 0 0 4px"></div>'+
+          '<div style="font-size:13px;font-weight:800;color:'+bc+';margin-bottom:6px">'+br.label+'</div>'+
+          '<div style="display:flex;flex-wrap:wrap;gap:5px">';
+      (br.points||[]).forEach(function(pt){
+        html+='<span style="background:'+bc+'18;border:1px solid '+bc+'28;border-radius:6px;padding:3px 8px;font-size:11px;color:var(--sub)">'+pt+'</span>';
+      });
+      html+='</div></div>';
+    });
+    html+='</div></div>';
+
+  // ── ALL OTHER STEPS: flip flashcards ────────────────────────────────────────
+  } else {
+    var items=Array.isArray(_m5Data[step.key])?_m5Data[step.key]:['Content loading...'];
+    var cardIdx=(_m5CardIdx||0);
+    if(cardIdx>=items.length)cardIdx=0;
+    _m5CardIdx=cardIdx;
+    var item=items[cardIdx];
+    var flipped=_m5Flipped||false;
+
+    // Card counter dots
+    var cdots='';
+    for(var ci=0;ci<items.length;ci++){
+      cdots+='<div style="width:'+(ci===cardIdx?'16':'6')+'px;height:6px;border-radius:99px;background:'+(ci===cardIdx?step.color:'rgba(255,255,255,.12)')+';transition:all .25s;cursor:pointer" onclick="m5CardGoto('+ci+')"></div>';
+    }
+
+    // Flip card — FRONT shows big emoji + section name. BACK shows the bite-sized point.
+    var cardNum=(cardIdx+1)+' of '+items.length;
+    var words=item.split(' ');
+    var teaser=words.slice(0,7).join(' ')+(words.length>7?'...':'');
+    html+=
+      '<div style="perspective:1000px;margin-bottom:14px;cursor:pointer;-webkit-tap-highlight-color:transparent" onclick="m5FlipCard()">'+
+        '<div id="m5-card-inner" style="position:relative;transform-style:preserve-3d;transition:transform .5s ease;height:220px;'+(flipped?'transform:rotateY(180deg)':'')+'">'+
+
+          // ── FRONT: icon + short teaser of THIS card's content ──────────
+          // Show first 6-8 words of the actual content as a teaser
+
+
+          '<div style="position:absolute;top:0;left:0;right:0;bottom:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;'+
+            'border-radius:20px;background:linear-gradient(160deg,'+step.color+'28,'+step.color+'0c,#0d1117);'+
+            'border:2px solid '+step.color+'45;'+
+            'display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 20px;text-align:center">'+
+            // Card counter top left
+            '<div style="position:absolute;top:12px;left:14px;background:'+step.color+'20;border-radius:20px;padding:3px 10px;font-size:10px;font-weight:800;color:'+step.color+'">'+cardNum+'</div>'+
+            // Section tag top right
+            '<div style="position:absolute;top:12px;right:14px;background:rgba(255,255,255,.06);border-radius:20px;padding:3px 10px;font-size:10px;font-weight:700;color:var(--fog)">'+step.tag+'</div>'+
+            // Big icon
+            '<div style="font-size:44px;margin-bottom:14px">'+step.icon+'</div>'+
+            // Teaser text — unique per card
+            '<div style="font-size:16px;font-weight:800;color:#fff;line-height:1.45;margin-bottom:8px;max-width:260px">'+teaser+'</div>'+
+            // Tap hint
+            '<div style="position:absolute;bottom:14px;font-size:11px;color:var(--muted)">TAP TO FLIP &#8595;</div>'+
+          '</div>'+
+
+          // ── BACK: the actual bite-sized content point ─────────────────
+          '<div style="position:absolute;top:0;left:0;right:0;bottom:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:rotateY(180deg);'+
+            'border-radius:20px;background:linear-gradient(160deg,#0f1923,#0d1117);'+
+            'border:2px solid '+step.color+'55;'+
+            'display:flex;flex-direction:column;padding:20px">'+
+            '<div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">'+
+              '<span style="font-size:20px">'+step.icon+'</span>'+
+              '<div>'+
+                '<div style="font-size:10px;font-weight:800;letter-spacing:.1em;color:'+step.color+';text-transform:uppercase">'+step.tag+'</div>'+
+                '<div style="font-size:11px;color:var(--fog)">Card '+cardNum+'</div>'+
+              '</div>'+
+            '</div>'+
+            '<div style="flex:1;display:flex;align-items:center">'+
+              '<div style="font-size:15px;font-weight:600;color:#f1f5f9;line-height:1.65">'+item+'</div>'+
+            '</div>'+
+            '<div style="margin-top:12px;text-align:center;font-size:11px;color:var(--muted)">TAP TO FLIP BACK &#8593;</div>'+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+
+      // Card navigation
+      '<div style="display:flex;gap:6px;justify-content:center;margin-bottom:12px">'+cdots+'</div>'+
+      '<div style="display:flex;gap:8px;margin-bottom:14px">'+
+        '<button onclick="m5PrevCard()" style="flex:1;padding:10px;border-radius:11px;background:var(--card2);border:1px solid var(--border2);color:var(--sub);font-size:13px;cursor:pointer'+(cardIdx===0?';opacity:.3;pointer-events:none':'')+'">&#8592; Prev</button>'+
+        '<button onclick="m5NextCard()" style="flex:1;padding:10px;border-radius:11px;background:'+step.color+';border:none;color:#fff;font-size:13px;font-weight:700;cursor:pointer">'+
+          (cardIdx===items.length-1?(isLast?'Done &#10003;':'Next Section &#8594;'):'Next Card &#8594;')+
+        '</button>'+
+      '</div>';
+  }
+
+  // Section nav
+  html+=
+    '<div style="display:flex;gap:8px">'+
+      '<button class="btn btn-secondary f1" onclick="prevM5()"'+(S.m5Step===0?' disabled':'')+' style="font-size:13px">&#8592; Back</button>'+
+      (isLast&&step.key!=='mindmap'
+        ? '<button class="btn btn-green f1" onclick="goToQuiz()" style="font-size:13px">&#10003; Take Quiz</button>'
+        : '<button class="btn btn-primary f1" onclick="nextM5()" style="font-size:13px">'+M5_STEPS[Math.min(S.m5Step+1,4)].label+' &#8594;</button>'
+      )+
+    '</div>';
+
+  // Add AI Explain section at end of last step
+  if(S.m5Step>=4){
+    html+=
+      '<div style="margin-top:20px;background:linear-gradient(135deg,rgba(99,102,241,.1),rgba(59,130,246,.06));border:1.5px solid rgba(99,102,241,.25);border-radius:18px;padding:18px;margin-bottom:4px">'+
+        '<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">'+
+          '<span style="font-size:24px">&#129302;</span>'+
+          '<div>'+
+            '<div style="font-size:15px;font-weight:800;color:#fff">AI Explain</div>'+
+            '<div style="font-size:12px;color:var(--fog)">Choose how you want it explained</div>'+
+          '</div>'+
+        '</div>'+
+        '<div id="explain-modes" style="display:flex;gap:6px;margin-bottom:14px">'+
+          ['simple','example','analogy','deeper','diagram'].map(function(m,mi){
+            var icons=['&#128161;','&#127775;','&#129504;','&#128300;','&#128506;'];
+            var labels=['Simple','Example','Analogy','Deeper','Diagram'];
+            var descs=['Plain English','Real examples','Compare to life','More detail','Visual map'];
+            var active=m===_explainMode;
+            return '<button onclick="setExplainMode(\''+m+'\',this)" style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 6px;border-radius:12px;background:'+(active?'rgba(99,102,241,.25)':'var(--card2)')+';border:'+(active?'1.5px solid rgba(99,102,241,.5)':'1px solid var(--border2)')+';cursor:pointer;flex:1">'+
+              '<span style="font-size:20px">'+icons[mi]+'</span>'+
+              '<div style="font-size:11px;font-weight:800;color:'+(active?'#a5b4fc':'var(--sub)')+'">'+labels[mi]+'</div>'+
+              '<div style="font-size:9px;color:var(--fog)">'+descs[mi]+'</div>'+
+            '</button>';
+          }).join('')+
+        '</div>'+
+        '<div id="explain-output" style="min-height:60px"></div>'+
+      '</div>';
+  }
+
+  document.getElementById('learn-area').innerHTML=html;
+  if(S.m5Step>=4){showExplainModes();}
+  addXP(5,'Section completed');
+}
+
+var _m5CardIdx=0;
+var _m5Flipped=false;
+
+function m5FlipCard(){
+  _m5Flipped=!_m5Flipped;
+  var inner=document.getElementById('m5-card-inner');
+  if(inner)inner.style.transform=_m5Flipped?'rotateY(180deg)':'rotateY(0deg)';
+}
+function m5NextCard(){
+  var step=M5_STEPS[Math.min(S.m5Step,4)];
+  var items=Array.isArray(_m5Data[step.key])?_m5Data[step.key]:[];
+  _m5Flipped=false;
+  if(_m5CardIdx<items.length-1){_m5CardIdx++;renderM5Step();}
+  else{nextM5();}
+}
+function m5PrevCard(){
+  _m5Flipped=false;
+  if(_m5CardIdx>0){_m5CardIdx--;renderM5Step();}
+}
+function m5CardGoto(i){_m5CardIdx=i;_m5Flipped=false;renderM5Step();}
+function jumpM5(i){S.m5Step=i;_m5CardIdx=0;_m5Flipped=false;sv();renderM5Step();}
+
+function nextM5(){
+  if(S.m5Step<4){S.m5Step++;_m5CardIdx=0;_m5Flipped=false;sv();renderM5Step();}
+}
+function prevM5(){
+  if(S.m5Step>0){S.m5Step--;_m5CardIdx=0;_m5Flipped=false;sv();renderM5Step();}
+}
+function goToQuiz(){switchTab('quiz');}
+
+// ===
+//   AI EXPLAIN MODES
+// ===
+var _explainMode='simple';
+var _explainCache={};
+function showExplainModes(){
+  var area=document.getElementById('learn-area');
+  if(!area)return;
+  var modes=[
+    {id:'simple',icon:'&#128161;',label:'Simple',desc:'Plain English'},
+    {id:'example',icon:'&#127775;',label:'Example',desc:'Real examples'},
+    {id:'analogy',icon:'&#129504;',label:'Analogy',desc:'Compare to life'},
+    {id:'deeper',icon:'&#128300;',label:'Deeper',desc:'More detail'},
+    {id:'diagram',icon:'&#128506;',label:'Diagram',desc:'Visual map'}
+  ];
+  var btns=modes.map(function(m){
+    var active=m.id===_explainMode;
+    return '<button onclick="setExplainMode(\''+m.id+'\',this)" style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 6px;border-radius:12px;background:'+(active?'rgba(99,102,241,.25)':'var(--card2)')+';border:'+(active?'1.5px solid rgba(99,102,241,.5)':'1px solid var(--border2)')+';cursor:pointer;flex:1">'+
+      '<span style="font-size:20px">'+m.icon+'</span>'+
+      '<div style="font-size:11px;font-weight:800;color:'+(active?'#a5b4fc':'var(--sub)')+'">'+m.label+'</div>'+
+      '<div style="font-size:9px;color:var(--fog)">'+m.desc+'</div>'+
+    '</button>';
+  }).join('');
+  
+  var explainArea=document.getElementById('explain-output');
+  if(!explainArea)return;
+  var cached=_explainCache[_explainMode];
+  if(cached){explainArea.innerHTML=cached;return;}
+  
+  explainArea.innerHTML='<div style="text-align:center;padding:20px"><div class="spin" style="margin:0 auto 10px"></div><div class="xs fog">Generating '+_explainMode+' explanation...</div></div>';
+  var modePrompts={
+    simple:'Explain this chapter topic in the SIMPLEST possible English. Like explaining to a 12-year-old. Use short sentences. No jargon.',
+    example:'Explain using 3 real-world examples that Indian students can relate to. Each example should make the concept crystal clear.',
+    analogy:'Use 2-3 creative analogies to explain this topic. Compare it to everyday things students know.',
+    deeper:'Give a deeper explanation with the science/reasoning behind it. Include sub-concepts and connections.',
+    diagram:'Create a text-based visual diagram or structured layout showing how concepts connect.'
+  };
+  var sys='You are an AI teacher for Indian NCERT students. '+modePrompts[_explainMode]+' Keep it under 200 words. Use simple formatting.';
+  var msg='Explain: '+S.chapter_sel+' ('+S.subject_sel+', Class '+S.cls_sel+' CBSE NCERT)';
+  ask(sys,msg,function(txt){
+    var out='<div style="font-size:14px;color:#e2e8f0;line-height:1.7">'+md(txt)+'</div>';
+    _explainCache[_explainMode]=out;
+    explainArea.innerHTML=out;
+  },function(err){
+    explainArea.innerHTML='<div style="color:#fca5a5;font-size:13px">'+err+'</div>';
+  });
+}
+
+function setExplainMode(mode,btn){
+  _explainMode=mode;
+  showExplainModes();
+  // re-render mode selector
+  var modeBar=document.getElementById('explain-modes');
+  if(!modeBar)return;
+  // rebuild just buttons
+  var modes=[
+    {id:'simple',icon:'&#128161;',label:'Simple',desc:'Plain English'},
+    {id:'example',icon:'&#127775;',label:'Example',desc:'Real examples'},
+    {id:'analogy',icon:'&#129504;',label:'Analogy',desc:'Compare to life'},
+    {id:'deeper',icon:'&#128300;',label:'Deeper',desc:'More detail'},
+    {id:'diagram',icon:'&#128506;',label:'Diagram',desc:'Visual map'}
+  ];
+  modeBar.innerHTML=modes.map(function(m){
+    var active=m.id===_explainMode;
+    return '<button onclick="setExplainMode(\''+m.id+'\',this)" style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 6px;border-radius:12px;background:'+(active?'rgba(99,102,241,.25)':'var(--card2)')+';border:'+(active?'1.5px solid rgba(99,102,241,.5)':'1px solid var(--border2)')+';cursor:pointer;flex:1">'+
+      '<span style="font-size:20px">'+m.icon+'</span>'+
+      '<div style="font-size:11px;font-weight:800;color:'+(active?'#a5b4fc':'var(--sub)')+'">'+m.label+'</div>'+
+      '<div style="font-size:9px;color:var(--fog)">'+m.desc+'</div>'+
+    '</button>';
+  }).join('');
+  showExplainModes();
+}
+
+// ===
+//   QUIZ (Burst of 5)
+// ===
+var _quiz=[],_qIdx=0,_qScore=0,_qDone=false;
+
+function render_quiz_tab(){
+  if(_quiz.length===0)genQuiz();
+}
+
+function genQuiz(){
+  showLoading('quiz-area','Generating 5-question burst for '+S.chapter_sel+'...');
+  var sys='You generate quiz questions for Indian NCERT students using Bloom\'s Taxonomy (remember, understand, apply). Return ONLY a JSON array: [{"q":"question","opts":["A","B","C","D"],"ans":0,"exp":"explanation","bloom":"Remember/Understand/Apply"}]. Include 2 Remember, 2 Understand, 1 Apply question.';
+  var msg='Chapter: "'+S.chapter_sel+'", Subject: '+S.subject_sel+', Class: '+S.cls_sel+' CBSE NCERT. Generate 5 MCQ questions using Bloom\'s Taxonomy levels.';
+  _lastRetry=genQuiz;
+  ask(sys,msg,
+    function(txt){
+      try{
+        var clean=txt.replace(/```json\n?/g,'').replace(/```\n?/g,'').trim();
+        var m=clean.match(/\[[\s\S]*?\]/);
+        _quiz=JSON.parse(m[0]);
+        _qIdx=0;_qScore=0;_qDone=false;
+        renderQuizQ();
+      }catch(e){showErr('quiz-area','Could not load quiz. <button class="btn btn-secondary btn-xs" onclick="genQuiz()" style="margin-left:8px">Retry</button>');}
+    },
+    function(err){showErr('quiz-area',err);}
+  );
+}
+
+function renderQuizQ(){
+  if(_qDone){renderQuizResult();return;}
+  var q=_quiz[_qIdx],tot=_quiz.length;
+  var bloom=q.bloom||'';
+  var bloomColor=bloom==='Apply'?'var(--violet)':bloom==='Understand'?'var(--blue)':'var(--green)';
+  var html=
+    '<div class="row between mb10">'+
+      '<div class="row gap6"><span class="xs fog bold">Q'+(_qIdx+1)+' / '+tot+'</span><span class="badge" style="background:'+bloomColor+'20;color:'+bloomColor+';border:1px solid '+bloomColor+'40;font-size:10px">'+bloom+'</span></div>'+
+      '<span class="xs fog">Score: '+_qScore+'</span>'+
+    '</div>'+
+    '<div class="prog mb16"><div class="prog-fill" style="width:'+Math.round(_qIdx/tot*100)+'%"></div></div>'+
+    // Socratic prompt - make student think FIRST
+    '<div style="background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.15);border-radius:12px;padding:12px 14px;margin-bottom:12px">'+
+    '<div class="xs" style="color:var(--violet);font-weight:700;margin-bottom:4px">4 THINK FIRST</div>'+
+    '<div class="sm sub">Before clicking, think: <em>what do you know about this topic?</em></div></div>'+
+    '<div class="card mb12"><div style="font-size:15px;font-weight:600;line-height:1.55">'+q.q+'</div></div>'+
+    '<div id="q-opts">';
+  q.opts.forEach(function(o,i){
+    html+='<button class="qopt" id="qo'+i+'" onclick="answerQ('+i+')">' +
+      '<div class="qdot">'+String.fromCharCode(65+i)+'</div><span>'+o+'</span></button>';
+  });
+  html+='</div><div id="q-fb"></div>';
+  document.getElementById('quiz-area').innerHTML=html;
+}
+
+function answerQ(chosen){
+  var q=_quiz[_qIdx],correct=q.ans,right=chosen===correct;
+  if(right)_qScore++;
+  for(var i=0;i<q.opts.length;i++){
+    var btn=document.getElementById('qo'+i);
+    if(btn){btn.disabled=true;btn.onclick=null;
+      if(i===correct)btn.classList.add('correct');
+      else if(i===chosen&&!right)btn.classList.add('wrong');
+    }
+  }
+  var fb=document.getElementById('q-fb');
+  if(fb)fb.innerHTML=
+    '<div class="ai-out mt10" style="border-color:'+(right?'rgba(34,197,94,.3)':'rgba(239,68,68,.3)')+'">'+
+    '<strong style="color:'+(right?'var(--green)':'var(--red)')+'">'+(right?'[OK] Correct!':'[X] Incorrect')+'</strong> '+md(q.exp||'')+'</div>'+
+    '<button class="btn btn-primary btn-full mt10" onclick="nextQ()">'+(_qIdx+1>=_quiz.length?'See Results [trophy]':'Next Question ->')+'</button>';
+}
+
+function nextQ(){
+  _qIdx++;
+  if(_qIdx>=_quiz.length){_qDone=true;renderQuizResult();}
+  else renderQuizQ();
+}
+
+function renderQuizResult(){
+  var tot=_quiz.length,pct=Math.round(_qScore/tot*100);
+  var col=pct>=80?'var(--green)':pct>=60?'var(--amber)':'var(--red)';
+  var msg=pct>=80?'Excellent! You have mastered this chapter! [trophy]':pct>=60?'Good work! A little more practice needed':'Let us revise - review this chapter again';
+  var clarity=pct>=80?'High Clarity':pct>=60?'Medium Clarity':'Needs Revision';
+  clarity=pct>=80?'High Clarity':pct>=60?'Medium Clarity':'Needs Revision';
+  // Save progress
+  S.progress[pgKey(S.board_sel,S.cls_sel,S.subject_sel,S.chIdx)]={done:pct>=60,score:pct,ts:Date.now()};
+  sv();checkStreak();addXP(pct>=80?50:pct>=60?30:15,'Chapter quiz');checkBadges();
+  var html='<div class="card center-text">'+
+    '<div style="font-size:48px;margin-bottom:10px">'+(pct>=80?'[trophy]':pct>=60?'[target]':'[books]')+'</div>'+
+    '<div style="font-size:40px;font-weight:800;color:'+col+';margin-bottom:6px">'+pct+'%</div>'+
+    '<div class="h3 mb4">'+msg+'</div>'+
+    '<div class="sm fog mb8">Session Clarity: <strong style="color:'+col+'">'+clarity+'</strong></div>'+
+    '<div class="sm fog mb16">'+_qScore+' of '+tot+' correct</div>';
+  if(pct<70){
+    html+='<div class="card2 mb12" style="text-align:left;border-color:rgba(245,158,11,.25)">'+
+      '<div class="xs fog bold mb6" style="color:var(--amber)">(!) REVISION SUGGESTED</div>'+
+      '<div class="sm sub">Your score is below 70%. We recommend going back through reviewing this chapter - especially the <strong>Memory section</strong> and <strong>Mistake Zone</strong> steps.</div></div>';
+  }
+  html+='<div class="row gap8 jcenter wrap">'+
+    '<button class="btn btn-secondary" onclick="switchTab(\'learn\')">6 Review 5M</button>'+
+    '<button class="btn btn-primary" onclick="go(\'chapters\')">Next Chapter -></button>'+
+    '</div></div>';
+  document.getElementById('quiz-area').innerHTML=html;
+}
+
+// ===
+//   AI TUTOR (Socratic - ask before answer)
+// ===
+function render_tutor_tab(){
+  if(!PLANS[S.plan].limits.tutorAccess&&S.plan!=='free'){
+    document.getElementById('tutor-area').innerHTML='<div class="paywall"><div style="font-size:36px;margin-bottom:10px">6</div><div class="h3 mb6">AI Tutor</div><div class="sm fog mb14">Upgrade to Pro to unlock the AI Tutor - your personal Socratic learning guide.</div><button class="btn btn-gold btn-full" onclick="showPlans()">Upgrade to Pro -></button></div>';
+    return;
+  }
+  // Check free plan limit
+  if(S.plan==='free'&&!PLANS.free.limits.tutorAccess){
+    // Allow it but with daily cap message
+  }
+  renderTutor();
+}
+
+function renderTutor(){
+  var history=S.chatHistory;
+  var msgs='';
+  if(!history.length){
+    msgs='<div class="msg ai"><div class="av av-ai">6</div><div class="bubble">Hi '+S.name.split(' ')[0]+'! I\'m your AI tutor for <strong>'+S.chapter_sel+'</strong>.<br><br>But here\'s how I work - <em>I won\'t just give you answers.</em> I\'ll ask you to <strong>think first</strong>, then I\'ll guide you. This trains your brain to be active, not passive.<br><br>What would you like to understand better?</div></div>';
+  } else {
+    history.forEach(function(m){
+      if(m.r==='u')msgs+='<div class="msg user"><div class="bubble">'+m.t+'</div><div class="av av-u">'+S.name[0]+'</div></div>';
+      else msgs+='<div class="msg ai"><div class="av av-ai">6</div><div class="bubble ai-out" style="background:var(--card2);border:1px solid var(--border2);border-radius:16px 16px 16px 4px;max-width:86%">'+md(m.t)+'</div></div>';
+    });
+  }
+  var ta=document.getElementById('tutor-area');if(!ta)return;
+  ta.innerHTML='<div id="tutor-msgs" class="chat-area">'+msgs+'</div>'+
+    '<div class="chat-inp-wrap">'+
+    '<input class="inp f1" id="tutor-inp" type="text" placeholder="Ask a question..." onkeydown="if(event.key===\'Enter\'&&!event.shiftKey){event.preventDefault();sendTutor();}">'+
+    '<button class="btn btn-primary btn-icon" onclick="sendTutor()">^</button></div>';
+  scrollTutor();
+}
+
+function scrollTutor(){var c=document.getElementById('tutor-msgs');if(c)setTimeout(function(){c.scrollTop=c.scrollHeight;},60);}
+
+function sendTutor(){
+  var inp=document.getElementById('tutor-inp');if(!inp)return;
+  var txt=inp.value.trim();if(!txt)return;
+  inp.value='';S.chatHistory.push({r:'u',t:txt});sv();
+  var msgs=document.getElementById('tutor-msgs');
+  if(msgs){
+    msgs.innerHTML+='<div class="msg user"><div class="bubble">'+txt+'</div><div class="av av-u">'+S.name[0]+'</div></div>'+
+      '<div class="msg ai" id="ai-typing"><div class="av av-ai">6</div><div class="bubble pulse fog">Thinking...</div></div>';
+    scrollTutor();
+  }
+  var sys='You are the Master in Minutes AI Tutor - a Socratic guide for Indian school students studying "'+S.chapter_sel+'" ('+S.subject_sel+', Class '+S.cls_sel+' CBSE NCERT).\n\nCRITICAL BEHAVIOUR: You NEVER give direct answers immediately. Instead:\n1. First ask the student to THINK: pose a guiding question\n2. Wait for their attempt (in next message)\n3. Then confirm/correct and explain\n\nIf this is their first question, respond with a Socratic prompt that makes them engage their brain first.\nKeep responses concise (max 150 words). Use simple language. Be encouraging but firm about thinking first.\nIf the student gives a wrong answer, appreciate the attempt, then guide gently.\nNever lecture. Always engage.';
+  var convMsgs=S.chatHistory.map(function(m){return{role:m.r==='u'?'user':'assistant',content:m.t};});
+  callAI(sys,convMsgs,
+    function(reply){
+      S.chatHistory.push({r:'a',t:reply});sv();
+      var typing=document.getElementById('ai-typing');
+      if(typing)typing.outerHTML='<div class="msg ai"><div class="av av-ai">6</div><div class="bubble ai-out" style="background:var(--card2);border:1px solid var(--border2);border-radius:16px 16px 16px 4px;max-width:86%">'+md(reply)+'</div></div>';
+      scrollTutor();
+    },
+    function(err){
+      var typing=document.getElementById('ai-typing');
+      if(typing)typing.outerHTML='<div class="msg ai"><div class="av av-ai">6</div><div class="bubble" style="color:var(--red)">(!) '+err+'</div></div>';
+    }
+  );
+}
+
+// ===
+//   VIDEO TAB (YouTube integration)
+// ===
+function render_video_tab(){
+  var el=document.getElementById('video-area');if(!el)return;
+  var mimSearch='https://www.youtube.com/@masterinminutesindia';
+  var chSearch='https://www.youtube.com/results?search_query='+encodeURIComponent(S.chapter_sel+' '+S.subject_sel+' Class '+S.cls_sel+' NCERT explained');
+  el.innerHTML=
+    // MiM channel card
+    '<div style="background:linear-gradient(135deg,rgba(239,68,68,.12),rgba(239,68,68,.05));border:1.5px solid rgba(239,68,68,.3);border-radius:18px;padding:18px;margin-bottom:16px">'+
+      '<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">'+
+        '<div style="width:48px;height:48px;border-radius:14px;background:rgba(239,68,68,.2);display:flex;align-items:center;justify-content:center;font-size:22px">&#127909;</div>'+
+        '<div>'+
+          '<div style="font-size:15px;font-weight:800;color:var(--white)">Master in Minutes</div>'+
+          '<div style="font-size:12px;color:var(--fog)">@masterinminutesindia</div>'+
+        '</div>'+
+      '</div>'+
+      '<div style="font-size:13px;color:var(--sub);line-height:1.6;margin-bottom:14px">Watch our AI-generated video lessons for <strong style="color:var(--white)">'+S.chapter_sel+'</strong> and other NCERT chapters.</div>'+
+      '<a href="'+mimSearch+'" target="_blank" style="display:block;text-align:center;padding:12px;background:rgba(239,68,68,.2);border:1.5px solid rgba(239,68,68,.4);border-radius:12px;color:#fca5a5;font-weight:800;font-size:14px;text-decoration:none">&#9654; Open Master in Minutes Channel</a>'+
+    '</div>'+
+
+    // Search this chapter
+    '<div style="font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--fog);text-transform:uppercase;margin-bottom:10px">FIND THIS CHAPTER</div>'+
+    '<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">'+
+    [
+      {label:'Concept explanation - '+S.chapter_sel, q:S.chapter_sel+' '+S.subject_sel+' Class '+S.cls_sel+' explained simply'},
+      {label:'NCERT solutions - '+S.chapter_sel, q:S.chapter_sel+' NCERT solutions Class '+S.cls_sel},
+      {label:'Previous year questions', q:S.chapter_sel+' previous year questions Class '+S.cls_sel+' CBSE'}
+    ].map(function(item){
+      var url='https://www.youtube.com/results?search_query='+encodeURIComponent(item.q);
+      return '<a href="'+url+'" target="_blank" style="display:flex;align-items:center;gap:12px;background:var(--card2);border:1px solid var(--border2);border-radius:13px;padding:13px;text-decoration:none">'+
+        '<div style="width:36px;height:36px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">&#9654;</div>'+
+        '<div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--white)">'+item.label+'</div><div style="font-size:11px;color:var(--fog)">Search on YouTube</div></div>'+
+        '<span style="color:var(--fog);font-size:18px">&#8250;</span></a>';
+    }).join('')+
+    '</div>'+
+
+    // AI tutor prompt
+    '<div style="background:linear-gradient(135deg,rgba(99,102,241,.1),rgba(59,130,246,.06));border:1.5px solid rgba(99,102,241,.25);border-radius:14px;padding:14px;text-align:center">'+
+      '<div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:4px">Watched a video? Ask the AI Tutor!</div>'+
+      '<div style="font-size:12px;color:var(--fog);margin-bottom:10px">Clarify any doubt instantly</div>'+
+      '<button onclick="switchTab(\'tutor\')" style="padding:10px 20px;background:rgba(99,102,241,.25);border:1.5px solid rgba(99,102,241,.4);border-radius:10px;color:#a5b4fc;font-weight:700;font-size:13px;cursor:pointer">&#129302; Open AI Tutor</button>'+
+    '</div>';
+}
+
+function mapVideo(){
+  var id=document.getElementById('yt-id').value.trim();
+  if(!id){toast('Enter a YouTube video ID');return;}
+  var wrap=document.getElementById('video-area');
+  if(wrap){
+    wrap.insertAdjacentHTML('afterbegin','<div class="video-wrap"><iframe src="https://www.youtube.com/embed/'+id+'" allowfullscreen></iframe></div>');
+    toast('[OK] Video added!');
+  }
+}
+
+// ===
+//   TAB SWITCHER
+// ===
+function switchTab(tab){
+  document.querySelectorAll('.ptab').forEach(function(t){t.classList.toggle('on',t.dataset.tab===tab);});
+  document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.toggle('on',p.id==='tab-'+tab);});
+  if(tab==='snapshot')render_snapshot();
+  if(tab==='quiz')render_quiz_tab();
+  if(tab==='radar')render_exam_radar();
+  if(tab==='tutor')render_tutor_tab();
+  if(tab==='video')render_video_tab();
+  if(tab==='learn'){if(Object.keys(_m5Data).length){renderM5Step();}else{load5M();}}
+}
+
+// ===
+//   ASK AI PAGE
+// ===
+function render_ask(){
+  var qts=[
+    'Explain Newton\'s 3 Laws with examples',
+    'What is photosynthesis? (Class 10)',
+    'Difference between acids and bases',
+    'The French Revolution - causes and effects',
+    'How to solve quadratic equations',
+    'Explain DNA replication simply',
+    'What is Ohm\'s Law?',
+    'Carbon and its compounds - key concepts'
+  ];
+  var html='';
+  qts.forEach(function(q){
+    html+='<button class="btn btn-secondary btn-sm" style="text-align:left;justify-content:flex-start" onclick="askQuick(\''+esc(q)+'\')">'+q+'</button>';
+  });
+  var qt=document.getElementById('quick-topics');if(qt)qt.innerHTML=html;
+}
+
+function doAsk(){
+  var inp=document.getElementById('ask-inp');if(!inp)return;
+  var q=inp.value.trim();if(!q){toast('Type a question');return;}
+  askQuick(q);
+}
+
+function askQuick(q){
+  var inp=document.getElementById('ask-inp');if(inp)inp.value=q;
+  showLoading('ask-output','Getting your answer...');
+  var sys='You are a friendly AI tutor for Indian school students following NCERT/CBSE curriculum. Answer questions clearly and simply. Use the 5M approach: start with the core concept, add a visual/mind map description, include a memory trick, flag common mistakes, and end with a real-world connection. Use simple English. Format with clear headings.';
+  _lastRetry=function(){askQuick(q);};
+  ask(sys,q,
+    function(t){document.getElementById('ask-output').innerHTML='<div class="ai-out">'+md(t)+'</div>';},
+    function(err){showErr('ask-output',err);}
+  );
+}
+
+// ===
+//   PROGRESS PAGE
+// ===
+function render_progress(){
+  var done=Object.keys(S.progress).length;
+  var scores=Object.values(S.progress).map(function(p){return p.score||0;});
+  var avg=scores.length?Math.round(scores.reduce(function(a,b){return a+b;},0)/scores.length):0;
+  var ps=document.getElementById('prog-streak');if(ps)ps.textContent=S.streak||0;
+  var px=document.getElementById('prog-xp');if(px)px.textContent=S.xp||0;
+  var pd=document.getElementById('prog-done');if(pd)pd.textContent=done;
+  var pa=document.getElementById('prog-avg');if(pa)pa.textContent=scores.length?(avg+'%'):'-';
+  var html='';
+  if(!done){html='<div class="empty"><span class="empty-icon">A</span><div class="empty-ttl">No data yet</div><div class="sm fog">Complete chapters to see your progress</div></div>';}
+  else{
+    Object.keys(S.progress).forEach(function(key){
+      var pts=key.split('_'),b=pts[0],c=pts[1],s=pts[2],i=parseInt(pts[3]);
+      var bd=CUR[b];if(!bd)return;var cd=bd.classes[c];if(!cd||!cd[s])return;
+      var ch=cd[s].chapters[i]||'Chapter';var p=S.progress[key];
+      var col=p.score>=80?'var(--green)':p.score>=60?'var(--amber)':'var(--red)';
+      html+='<div class="card mb8"><div class="row between mb6"><div class="f1"><div class="bold sm mb2">'+ch+'</div><div class="xs fog">'+s+'  -  Class '+c+'</div></div><div style="font-size:20px;font-weight:800;color:'+col+'">'+p.score+'%</div></div>'+
+        '<div class="prog"><div class="prog-fill" style="width:'+p.score+'%;background:'+col+'"></div></div></div>';
+    });
+  }
+  var pl=document.getElementById('prog-list');if(pl)pl.innerHTML=html;
+}
+
+// ===
+//   PROFILE PAGE
+// ===
+function render_profile(){
+  var av=document.getElementById('prof-avatar');if(av)av.textContent=S.name?S.name[0].toUpperCase():'?';
+  var nm=document.getElementById('prof-name');if(nm)nm.textContent=S.name||'Student';
+  var dt=document.getElementById('prof-detail');if(dt)dt.textContent='Class '+S.cls+'  -  '+(S.board||'CBSE').toUpperCase()+'  -  '+S.phone;
+  var gt=document.getElementById('prof-goal-tag');if(gt)gt.textContent=S.goal?'[target] '+S.goal:'';
+  var pn=document.getElementById('plan-name');if(pn)pn.textContent=PLANS[S.plan].name+' Plan';
+  var pd=document.getElementById('plan-desc');if(pd)pd.textContent=PLANS[S.plan].features.slice(0,2).join('  -  ');
+}
+
+// ===
+//   PLANS / UPGRADE
+// ===
+function showUpgrade(){
+  showModal('<div class="h3 mb4 grad-gold">Upgrade to Continue</div><div class="sm fog mb16">This chapter is locked on Freemium. Upgrade to access all chapters.</div>'+buildPlansHTML());
+}
+
+function showPlans(){
+  showModal('<div class="h3 mb4">Choose Your Plan</div><div class="sm fog mb16">Start with Freemium, upgrade anytime.</div>'+buildPlansHTML());
+}
+
+function buildPlansHTML(){
+  var html='';
+  var order=['free','starter','pro','school'];
+  order.forEach(function(pk){
+    var p=PLANS[pk];var isCur=S.plan===pk;var isPopular=pk==='pro';
+    html+='<div class="plan-card mb10'+(isCur?' selected':'')+(isPopular?' popular':'')+'" style="position:relative" onclick="setPlan(\''+pk+'\')">';
+    if(isPopular)html+='<div class="popular-tag"> Most Popular</div>';
+    if(isCur)html+='<div class="popular-tag" style="background:var(--grad-green)">OK Current Plan</div>';
+    html+='<div class="row between mb8"><div><div class="bold" style="color:'+p.color+'">'+p.name+'</div>'+
+      '<div style="font-size:20px;font-weight:800;margin-top:2px">'+(pk==='free'?'Free':'Rs'+p.price+'/mo')+'</div></div>'+
+      (pk!=='free'&&!isCur?'<button class="btn btn-sm" style="background:'+p.color+';color:#fff;border:none" onclick="setPlan(\''+pk+'\');hideModal()">Select</button>':'')+
+    '</div>'+
+    '<div class="col gap4">'+p.features.map(function(f){return '<div class="xs sub">OK '+f+'</div>';}).join('')+'</div></div>';
+  });
+  html+='<div class="xs fog center-text mt12">3 Payment integration via Razorpay - coming soon. Contact team@masterinminutes.in to upgrade manually.</div>';
+  return html;
+}
+
+function setPlan(pk){
+  if(pk==='free'){S.plan=pk;sv();toast('Switched to Freemium');hideModal();return;}
+  // In production, this would trigger Razorpay
+  toast('Rs'+PLANS[pk].price+'/mo - Payment via Razorpay coming soon! Contact team@masterinminutes.in');
+  // For demo, unlock
+  S.plan=pk;sv();toast('[OK] '+PLANS[pk].name+' plan activated (demo)');hideModal();
+  render_profile();
+}
+
+// ===
+//   TEACHER PORTAL
+// ===
+function render_teacher_home(){
+  var wl=document.getElementById('t-welcome');if(wl)wl.textContent='Welcome, '+(S.tName||'Teacher')+'!';
+  var sc=document.getElementById('t-school-name');if(sc)sc.textContent=S.tSchool||'Teacher Portal';
+}
+
+function tGen(type){
+  var ch=document.getElementById('tq-chapter').value.trim();
+  if(!ch){toast('Enter a chapter name first');return;}
+  var sub=document.getElementById('tq-subject').value;
+  var gr=document.getElementById('tq-grade').value;
+  showLoading('t-output','Generating '+type+'...');
+  var prompts={
+    lesson:'Create a detailed teacher lesson plan for:\nChapter: "'+ch+'"\nSubject: '+sub+'\nClass: '+gr+' CBSE NCERT\n\nFormat:\n## Chapter Summary (teacher reference)\n## Learning Objectives (5 clear points)\n## 5M Framework Delivery Plan\n(For each M: teaching strategy, time allocation, student activity)\n## Common Student Misconceptions\n## Differentiation (support for weak, extension for advanced)\n## Homework Assignment\n## Sample Exam Questions (3 MCQ + 2 short answer)',
+    worksheet:'Create a complete student worksheet for:\nChapter: "'+ch+'"\nSubject: '+sub+'\nClass: '+gr+' CBSE NCERT\n\n## Section A: Fill in the Blanks (5)\n## Section B: True or False (5)\n## Section C: Match the Following (5 pairs)\n## Section D: Short Answer 2 marks (3 questions)\n## Section E: Long Answer 5 marks (1 question)\n## Bonus: HOTS Question\n---\n## Answer Key (complete)',
+    quiz:'Create a 10-question MCQ quiz for:\nChapter: "'+ch+'"\nSubject: '+sub+'\nClass: '+gr+' CBSE NCERT\n\nFor each question:\n- Question\n- Options A, B, C, D\n- Correct Answer\n- Explanation\n\nMix: 3 easy (Remember), 5 medium (Understand), 2 hard (Apply/Analyse)\nCover all major chapter concepts.',
+    summary:'Write a comprehensive chapter summary for:\nChapter: "'+ch+'"\nSubject: '+sub+'\nClass: '+gr+' CBSE NCERT\n\n## What This Chapter Is About\n## Key Concepts Explained Simply\n## Important Definitions\n## Key Formulas / Diagrams\n## Real-Life Applications\n## Quick Revision Points\n## Common Exam Questions'
+  };
+  var sys='You are an expert Indian school educator creating classroom-ready NCERT-aligned content.';
+  _lastRetry=function(){tGen(type);};
+  ask(sys,prompts[type],
+    function(t){document.getElementById('t-output').innerHTML='<div class="ai-out">'+md(t)+'</div>';},
+    function(err){showErr('t-output',err);}
+  );
+}
+function tGenLesson(){tGen('lesson');}
+function tQuickGen(type){
+  // Scroll to quick generate section and focus chapter input
+  var ch=document.getElementById('tq-chapter');
+  if(ch){ch.focus();ch.scrollIntoView({behavior:'smooth',block:'center'});}
+  // Store the intended type so Generate button knows what to make
+  _tQuickType=type;
+  // Update UI to show which type is selected
+  var labels={'lesson':'Lesson Plan','worksheet':'Worksheet','quiz':'Quiz Set','summary':'Summary'};
+  toast('Enter chapter name then tap Generate '+labels[type]);
+}
+var _tQuickType='lesson';
+function tGenWorksheet(){tGen('worksheet');}
+function tGenQuiz(){tGen('quiz');}
+function tGenSummary(){tGen('summary');}
+
+// Teacher Progress Tracker
+function render_teacher_progress(){
+  var html='<div class="card mb16" style="background:rgba(139,92,246,.06);border-color:rgba(139,92,246,.2)">'+
+    '<div class="sm sub lh">Student data appears here when students are connected to your school account. In the full version with Firebase backend, you\'ll see real-time progress for all your students.</div></div>'+
+    '<div class="h4 mb10">DEMO STUDENTS</div>';
+  var demoStudents=[
+    {name:'Arjun Sharma',cls:'10',chapters:7,avg:84,streak:5},
+    {name:'Priya Nair',cls:'10',chapters:12,avg:91,streak:8},
+    {name:'Ravi Kumar',cls:'9',chapters:3,avg:62,streak:2},
+    {name:'Anjali Singh',cls:'11',chapters:5,avg:78,streak:4}
+  ];
+  demoStudents.forEach(function(st){
+    var col=st.avg>=80?'var(--green)':st.avg>=60?'var(--amber)':'var(--red)';
+    html+='<div class="card mb8"><div class="row between mb8">'+
+      '<div class="row gap10"><div style="width:38px;height:38px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff">'+st.name[0]+'</div>'+
+      '<div><div class="bold sm">'+st.name+'</div><div class="xs fog">Class '+st.cls+'  -  '+st.chapters+' chapters  -  [fire]'+st.streak+' streak</div></div></div>'+
+      '<div style="font-size:18px;font-weight:800;color:'+col+'">'+st.avg+'%</div></div>'+
+      '<div class="prog"><div class="prog-fill" style="width:'+st.avg+'%;background:'+col+'"></div></div>'+
+      '<div class="row gap8 mt8">'+
+      '<button class="btn btn-xs btn-secondary f1" onclick="toast(\'Student report generated\')">A Report</button>'+
+      '<button class="btn btn-xs btn-green f1" onclick="toast(\'Chapter unlocked for '+st.name+'!\')">[unlock] Unlock Chapter</button>'+
+      '</div></div>';
+  });
+  var sl=document.getElementById('t-student-list');if(sl)sl.innerHTML=html;
+}
+
+// ===
+//   PARENT DASHBOARD
+// ===
+function render_parent_home(){
+  var wl=document.getElementById('p-welcome');if(wl)wl.textContent='Hello, '+(S.pName||'Parent')+'!';
+  var cn=document.getElementById('p-child-name');if(cn)cn.textContent=S.pChild?"Your child "+S.pChild+"'s learning report":'Your child\'s learning report';
+  // Use the student's progress if same device
+  var done=Object.keys(S.progress).length;
+  var scores=Object.values(S.progress).map(function(p){return p.score||0;});
+  var avg=scores.length?Math.round(scores.reduce(function(a,b){return a+b;},0)/scores.length):0;
+  var cl=avg>=80?'High Clarity':avg>=60?'Good Progress':done===0?'Just Started':'Needs Revision';
+  var pc=document.getElementById('p-clarity');if(pc)pc.textContent=cl;
+  var pcd=document.getElementById('p-clarity-desc');
+  if(pcd)pcd.textContent=avg>=80?'Your child understands concepts well and is on track.':avg>=60?'Good progress with some areas needing attention.':done===0?'Learning journey just beginning - encourage daily 20 min sessions.':'Some concepts need revision. Daily practice recommended.';
+  var ps=document.getElementById('p-streak');if(ps)ps.textContent=S.streak||0;
+  var pch=document.getElementById('p-chapters');if(pch)pch.textContent=done;
+  var psc=document.getElementById('p-score');if(psc)psc.textContent=scores.length?(avg+'%'):'-';
+}
+
+function genParentReport(){
+  var done=Object.keys(S.progress).length;
+  var scores=Object.values(S.progress).map(function(p){return p.score||0;});
+  var avg=scores.length?Math.round(scores.reduce(function(a,b){return a+b;},0)/scores.length):0;
+  showLoading('parent-report-output','Generating parent report...');
+  var sys='You are a parent communication specialist for an Indian school EdTech platform. Write reports that are warm, clear, and actionable. Avoid technical jargon. Always be encouraging. Keep tone calm and reassuring.';
+  var msg='Generate a parent report for:\nChild: '+S.pChild+'\nClass: '+S.pChildCls+'\nChapters completed: '+done+'\nAverage quiz score: '+avg+'%\nStreak: '+S.streak+' days\n\nWrite:\n## How Your Child Is Doing\n(Translate the score into a simple clarity level - avoid technical language)\n## What They Are Good At\n(Based on higher scoring chapters - speak positively)\n## Areas That Need Your Support\n(Frame constructively, not negatively)\n## 3 Practical Steps You Can Take at Home\n(Simple, doable actions for parents)\n## Recommended Daily Study Time\n(Encourage 20-minute structured learning)\n## A Motivating Message for Your Child\n(Write directly to the child, warm and encouraging)';
+  _lastRetry=genParentReport;
+  ask(sys,msg,
+    function(t){document.getElementById('parent-report-output').innerHTML='<div class="ai-out">'+md(t)+'</div>';},
+    function(err){showErr('parent-report-output',err);}
+  );
+}
+
+// ===
+//   UTILS
+// ===
+function esc(s){return s.replace(/'/g,"\\'").replace(/"/g,'&quot;');}
+function resetAll(){if(confirm('Reset ALL data? This cannot be undone.')){localStorage.removeItem('mim3_s');location.reload();}}
+
+
+// ===
+//   SNAPSHOT — quick overview of chapter in under 2 minutes
+// ===
+var _snapData=null;
+function render_snapshot(){
+  var area=document.getElementById('snapshot-area');
+  if(!area)return;
+  if(_snapData){renderSnapshotUI();return;}
+  area.innerHTML='<div style="text-align:center;padding:40px 0"><div class="spin" style="margin:0 auto 14px"></div><div class="sm fog">Building snapshot for '+S.chapter_sel+'...</div></div>';
+  var sys='You are a micro-learning expert for Indian NCERT students. Create a quick snapshot for a chapter. Return ONLY valid JSON: {"headline":"one powerful sentence that captures the whole chapter","why":"why this chapter matters in real life (1 sentence)","keypoints":["point 1","point 2","point 3","point 4","point 5"],"formula":"key formula or rule to remember (or empty string)","funfact":"one surprising or interesting fact about this topic","readtime":9}. Keep everything extremely simple, plain English.';
+  var msg='Chapter: "'+S.chapter_sel+'", Subject: '+S.subject_sel+', Class '+S.cls_sel+' CBSE NCERT';
+  ask(sys,msg,function(txt){
+    try{
+      var clean=txt.replace(/```json\n?/g,'').replace(/```/g,'').trim();
+      _snapData=JSON.parse(clean);
+      renderSnapshotUI();
+    }catch(e){
+      area.innerHTML='<div class="ai-out"><div class="sm sub">'+txt+'</div><div style="margin-top:12px"><button class="btn btn-secondary btn-sm" onclick="render_snapshot()">Retry</button></div></div>';
+    }
+  },function(err){
+    area.innerHTML='<div class="ai-out" style="border-color:rgba(239,68,68,.3)"><span style="color:#fca5a5">'+err+'</span><br><br><button class="btn btn-secondary btn-sm" onclick="render_snapshot()">Try Again</button></div>';
+  });
+}
+
+function renderSnapshotUI(){
+  var d=_snapData;
+  var area=document.getElementById('snapshot-area');
+  if(!area||!d)return;
+  var colors=['#3b82f6','#8b5cf6','#22c55e','#f59e0b','#06b6d4'];
+  var kps='';
+  (d.keypoints||[]).forEach(function(pt,i){
+    kps+='<div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:10px">'+
+      '<div style="width:24px;height:24px;border-radius:7px;background:'+colors[i%5]+'25;border:1px solid '+colors[i%5]+'40;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:'+colors[i%5]+';flex-shrink:0">'+(i+1)+'</div>'+
+      '<div style="font-size:14px;color:#e2e8f0;line-height:1.55;padding-top:3px">'+pt+'</div>'+
+    '</div>';
+  });
+  
+  area.innerHTML=
+    // Header card
+    '<div style="background:linear-gradient(135deg,rgba(99,102,241,.15),rgba(59,130,246,.08));border:1.5px solid rgba(99,102,241,.3);border-radius:18px;padding:18px;margin-bottom:12px">'+
+      '<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">'+
+        '<div style="font-size:28px">&#9889;</div>'+
+        '<div style="flex:1">'+
+          '<div style="font-size:11px;font-weight:800;letter-spacing:.1em;color:#818cf8;text-transform:uppercase;margin-bottom:2px">SNAPSHOT</div>'+
+          '<div style="font-size:17px;font-weight:900;color:#fff">'+S.chapter_sel+'</div>'+
+        '</div>'+
+        '<div style="background:rgba(99,102,241,.2);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:800;color:#a5b4fc">'+
+          '&#9203; '+(d.readtime||9)+' min'+
+        '</div>'+
+      '</div>'+
+      '<div style="font-size:15px;font-weight:700;color:#c7d2fe;line-height:1.5;font-style:italic">"'+d.headline+'"</div>'+
+    '</div>'+
+
+    // Why it matters
+    '<div style="background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);border-radius:14px;padding:14px 16px;margin-bottom:12px;display:flex;gap:10px;align-items:flex-start">'+
+      '<span style="font-size:20px">&#127775;</span>'+
+      '<div>'+
+        '<div style="font-size:10px;font-weight:800;color:#4ade80;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">WHY THIS MATTERS</div>'+
+        '<div style="font-size:14px;color:#e2e8f0;line-height:1.55">'+d.why+'</div>'+
+      '</div>'+
+    '</div>'+
+
+    // Key points
+    '<div style="background:var(--card2);border:1px solid var(--border2);border-radius:14px;padding:16px;margin-bottom:12px">'+
+      '<div style="font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--fog);text-transform:uppercase;margin-bottom:12px">KEY POINTS</div>'+
+      kps+
+    '</div>'+
+
+    // Formula if exists
+    (d.formula?
+      '<div style="background:rgba(245,158,11,.07);border:1.5px solid rgba(245,158,11,.25);border-radius:14px;padding:14px 16px;margin-bottom:12px;display:flex;gap:10px;align-items:flex-start">'+
+        '<span style="font-size:20px">&#128290;</span>'+
+        '<div>'+
+          '<div style="font-size:10px;font-weight:800;color:#fbbf24;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">KEY FORMULA / RULE</div>'+
+          '<div style="font-size:14px;color:#fef3c7;font-weight:700;line-height:1.5">'+d.formula+'</div>'+
+        '</div>'+
+      '</div>'
+    :'')+
+
+    // Fun fact
+    '<div style="background:rgba(6,182,212,.07);border:1px solid rgba(6,182,212,.2);border-radius:14px;padding:14px 16px;margin-bottom:16px;display:flex;gap:10px;align-items:flex-start">'+
+      '<span style="font-size:20px">&#128161;</span>'+
+      '<div>'+
+        '<div style="font-size:10px;font-weight:800;color:#22d3ee;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">DID YOU KNOW?</div>'+
+        '<div style="font-size:14px;color:#e2e8f0;line-height:1.55">'+d.funfact+'</div>'+
+      '</div>'+
+    '</div>'+
+
+    // CTA buttons
+    '<div style="display:flex;gap:8px">'+
+      '<button onclick="switchTab(\'learn\')" style="flex:1;padding:13px;border-radius:13px;background:linear-gradient(135deg,#3b82f6,#6366f1);border:none;color:#fff;font-size:14px;font-weight:800;cursor:pointer">&#128218; Start Learning</button>'+
+      '<button onclick="switchTab(\'quiz\')" style="flex:1;padding:13px;border-radius:13px;background:var(--card2);border:1px solid var(--border2);color:var(--sub);font-size:14px;font-weight:700;cursor:pointer">&#128161; Quick Quiz</button>'+
+    '</div>';
+
+  addXP(3,'Snapshot viewed');
+}
+
+// ===
+//   EXAM RADAR — high probability exam questions
+// ===
+var _radarData=null;
+function render_exam_radar(){
+  var area=document.getElementById('radar-area');
+  if(!area)return;
+  if(_radarData){renderRadarUI();return;}
+  area.innerHTML='<div style="text-align:center;padding:40px 0"><div class="spin" style="margin:0 auto 14px"></div><div class="sm fog">Scanning exam patterns for '+S.chapter_sel+'...</div></div>';
+  var sys='You are an exam expert for Indian CBSE/NCERT students. Analyze exam patterns for this chapter. Return ONLY valid JSON: {"hot":["Most likely exam question 1","Most likely exam question 2","Most likely exam question 3"],"trending":["Trending question 1","Trending question 2"],"tips":["Exam tip 1","Exam tip 2","Exam tip 3"],"marks":{"1mark":"topic for 1 mark","3mark":"topic for 3 marks","5mark":"topic for 5 marks"}}. Keep questions realistic, based on actual CBSE patterns.';
+  var msg='Chapter: "'+S.chapter_sel+'", Subject: '+S.subject_sel+', Class '+S.cls_sel+' CBSE NCERT. What questions appear most often in board exams?';
+  ask(sys,msg,function(txt){
+    try{
+      var clean=txt.replace(/```json\n?/g,'').replace(/```/g,'').trim();
+      _radarData=JSON.parse(clean);
+      renderRadarUI();
+    }catch(e){
+      area.innerHTML='<div class="ai-out"><div class="sm sub">'+txt+'</div></div>';
+    }
+  },function(err){
+    area.innerHTML='<div class="ai-out" style="border-color:rgba(239,68,68,.3)"><span style="color:#fca5a5">'+err+'</span><br><br><button class="btn btn-secondary btn-sm" onclick="render_exam_radar()">Try Again</button></div>';
+  });
+}
+
+function renderRadarUI(){
+  var d=_radarData;
+  var area=document.getElementById('radar-area');
+  if(!area||!d)return;
+
+  var hotHTML='';
+  (d.hot||[]).forEach(function(q,i){
+    var heat=i===0?'&#128308; HIGH':i===1?'&#128992; MED':'&#128993; LIKELY';
+    var heatColor=i===0?'#ef4444':i===1?'#f59e0b':'#22c55e';
+    hotHTML+=
+      '<div style="background:var(--card2);border:1px solid var(--border2);border-radius:13px;padding:14px;margin-bottom:8px">'+
+        '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">'+
+          '<div style="font-size:10px;font-weight:800;color:'+heatColor+'">'+heat+'</div>'+
+          '<button data-q="'+encodeURIComponent(q)+'" onclick="askRadarQ(this)" style="background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.3);border-radius:8px;padding:4px 10px;font-size:11px;color:#a5b4fc;font-weight:700;cursor:pointer">Ask AI &#8594;</button>'+
+        '</div>'+
+        '<div style="font-size:14px;color:#e2e8f0;font-weight:600;line-height:1.5">'+q+'</div>'+
+      '</div>';
+  });
+
+  var trendHTML='';
+  (d.trending||[]).forEach(function(q){
+    trendHTML+=
+      '<div style="background:rgba(139,92,246,.06);border:1px solid rgba(139,92,246,.2);border-radius:12px;padding:13px;margin-bottom:8px">'+
+        '<div style="display:flex;gap:8px;align-items:flex-start">'+
+          '<span style="font-size:16px">&#128200;</span>'+
+          '<div style="font-size:13px;color:#e2e8f0;line-height:1.5;flex:1">'+q+'</div>'+
+        '</div>'+
+      '</div>';
+  });
+
+  var tipsHTML='';
+  (d.tips||[]).forEach(function(tip){
+    tipsHTML+=
+      '<div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:10px">'+
+        '<span style="font-size:16px;flex-shrink:0">&#9989;</span>'+
+        '<div style="font-size:13px;color:#e2e8f0;line-height:1.5">'+tip+'</div>'+
+      '</div>';
+  });
+
+  area.innerHTML=
+    // Header
+    '<div style="background:linear-gradient(135deg,rgba(239,68,68,.12),rgba(245,158,11,.08));border:1.5px solid rgba(239,68,68,.3);border-radius:18px;padding:16px 18px;margin-bottom:14px;display:flex;align-items:center;gap:12px">'+
+      '<span style="font-size:28px">&#128225;</span>'+
+      '<div>'+
+        '<div style="font-size:17px;font-weight:900;color:#fff">Exam Radar</div>'+
+        '<div style="font-size:12px;color:var(--fog)">AI-predicted high probability questions</div>'+
+      '</div>'+
+    '</div>'+
+
+    // Hot questions
+    '<div style="font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--fog);text-transform:uppercase;margin-bottom:10px">&#128308; HIGH PROBABILITY QUESTIONS</div>'+
+    hotHTML+
+
+    // Mark allocation
+    (d.marks?
+      '<div style="background:rgba(59,130,246,.07);border:1px solid rgba(59,130,246,.2);border-radius:13px;padding:14px;margin-bottom:14px;margin-top:4px">'+
+        '<div style="font-size:11px;font-weight:800;color:#60a5fa;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px">MARK-WISE FOCUS</div>'+
+        '<div style="display:flex;gap:8px">'+
+          '<div style="flex:1;background:rgba(59,130,246,.1);border-radius:10px;padding:10px;text-align:center">'+
+            '<div style="font-size:11px;font-weight:800;color:#93c5fd;margin-bottom:4px">1 MARK</div>'+
+            '<div style="font-size:12px;color:#e2e8f0">'+( d.marks['1mark']||'MCQ'  )+'</div>'+
+          '</div>'+
+          '<div style="flex:1;background:rgba(139,92,246,.1);border-radius:10px;padding:10px;text-align:center">'+
+            '<div style="font-size:11px;font-weight:800;color:#c4b5fd;margin-bottom:4px">3 MARKS</div>'+
+            '<div style="font-size:12px;color:#e2e8f0">'+(d.marks['3mark']||'Short Ans')+'</div>'+
+          '</div>'+
+          '<div style="flex:1;background:rgba(34,197,94,.1);border-radius:10px;padding:10px;text-align:center">'+
+            '<div style="font-size:11px;font-weight:800;color:#86efac;margin-bottom:4px">5 MARKS</div>'+
+            '<div style="font-size:12px;color:#e2e8f0">'+(d.marks['5mark']||'Long Ans')+'</div>'+
+          '</div>'+
+        '</div>'+
+      '</div>'
+    :'')+
+
+    // Trending
+    '<div style="font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--fog);text-transform:uppercase;margin-bottom:10px">&#128200; TRENDING QUESTIONS</div>'+
+    trendHTML+
+
+    // Exam tips
+    '<div style="background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);border-radius:13px;padding:14px;margin-top:4px">'+
+      '<div style="font-size:11px;font-weight:800;color:#4ade80;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px">EXAM TIPS</div>'+
+      tipsHTML+
+    '</div>';
+
+  addXP(5,'Exam Radar used');
+}
+
+function askRadarQ(q){
+  S.chatHistory=[];
+  S.chatHistory.push({r:'u',t:'Explain this exam question: '+q});
+  sv();
+  switchTab('tutor');
+}
+
+
+// ===
+//   INIT
+// ===
+document.addEventListener('DOMContentLoaded',function(){
+  ld();
+  // Show api banner if key missing
+  updateApiBanner();
+  setTimeout(function(){
+    document.getElementById('sc-splash').classList.remove('on');
+    if(S.role&&S.name){
+      if(S.role==='student'){render_home();showScreen('home');}
+      else if(S.role==='teacher'){render_teacher_home();showScreen('teacher-home');}
+      else{render_parent_home();showScreen('parent-home');}
+    } else {
+      showScreen('role');
+    }
+  },1800);
+});
+
+
+
+
+
+
+</script>
+</body>
+</html>
