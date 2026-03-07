@@ -1312,6 +1312,7 @@ function registerParent(){
 
 function updateApiBanner(){
   var b=document.getElementById('home-api-banner');
+  if(b){b.style.display='none';} return; // Proxy handles API key
   if(!b)return;
   if(S.apiKey){b.style.display='none';}
   else{b.style.display='block';}
@@ -1373,7 +1374,7 @@ function render_home(){
   updateApiBanner();
   checkStreak();
   var hr=new Date().getHours();
-  var greet=(hr<12?'Good morning 5':hr<17?'Good afternoon ':'Good evening 9')+', '+S.name.split(' ')[0]+'!';
+  var greet=(hr<12?'Good morning':hr<17?'Good afternoon':'Good evening')+', '+S.name.split(' ')[0]+'!';
   var el=document.getElementById('home-greeting');if(el)el.textContent=greet;
   var gl=document.getElementById('home-goal-display');if(gl)gl.textContent='Goal: '+S.goal;
   var st=document.getElementById('home-streak');if(st)st.textContent=S.streak||0;
