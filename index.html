@@ -1286,7 +1286,7 @@ function registerStudent(){
   if(!cls){toast('Please select your class');return;}
   S.name=name;S.phone=phone;S.cls=cls;S.board=board;S.goal=goal||'Master my syllabus';
   S.board_sel=board;S.cls_sel=cls;
-  sv();showScreen('apikey');
+  sv();launchApp();
 }
 
 function registerTeacher(){
@@ -1297,7 +1297,7 @@ function registerTeacher(){
   S.tName=n;S.tPhone=ph;S.tSchool=sc||'';
   S.tSubjects=document.getElementById('t-subjects').value;
   S.tClasses=document.getElementById('t-classes').value;
-  sv();showScreen('apikey');
+  sv();launchApp();
 }
 
 function registerParent(){
@@ -1307,11 +1307,12 @@ function registerParent(){
   if(!n||!ph){toast('Please enter name and phone');return;}
   S.pName=n;S.pPhone=ph;S.pChild=child;
   S.pChildCls=document.getElementById('p-class').value;
-  sv();showScreen('apikey');
+  sv();launchApp();
 }
 
 function updateApiBanner(){
   var b=document.getElementById('home-api-banner');
+  if(b){b.style.display='none';} return;
   if(b){b.style.display='none';} return; // Proxy handles API key
   if(!b)return;
   if(S.apiKey){b.style.display='none';}
