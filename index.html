@@ -1111,7 +1111,7 @@ function callAI(sys,msgs,onDone,onErr){
   fetch(PROXY,{
     method:'POST',
     headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:1800,system:sys,messages:msgs})
+    body:JSON.stringify({model:'claude-sonnet-4-5-20251001',max_tokens:1800,system:sys,messages:msgs})
   })
   .then(function(r){
     if(!r.ok){return r.json().catch(function(){return {error:{message:'HTTP '+r.status+' - Check your API key is valid'}};});}
@@ -1124,7 +1124,7 @@ function callAI(sys,msgs,onDone,onErr){
   })
   .catch(function(e){
     console.error('MiM API error:',e);
-    if(onErr)onErr('Network error: '+e.message+'. Check your connection and API key.');
+    if(onErr)onErr('Network error: '+e.message+'. Please check your connection.');
   });
 }
 function ask(sys,msg,done,err){callAI(sys,[{role:'user',content:msg}],done,err);}
@@ -1700,36 +1700,29 @@ function renderM5Step(){
   // ── MINDMAP: special visual render ──────────────────────────────────────────
   if(step.key==='mindmap'){
     var mm=_m5Data.mindmap||{topic:S.chapter_sel,branches:[]};
-    html+=
-      '<div style="background:linear-gradient(135deg,#1e1040,#150d35);border:1.5px solid rgba(139,92,246,.35);border-radius:18px;padding:18px;margin-bottom:14px">'+
-        '<div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">'+
-          '<div style="width:36px;height:36px;border-radius:10px;background:rgba(139,92,246,.25);border:1px solid rgba(139,92,246,.4);display:flex;align-items:center;justify-content:center;font-size:17px">&#128336;</div>'+
-          '<div>'+
-            '<div style="font-size:10px;font-weight:800;letter-spacing:.1em;color:#a78bfa;text-transform:uppercase">CONNECTIONS</div>'+
-            '<div style="font-size:17px;font-weight:800;color:var(--white)">Visual Map</div>'+
-          '</div>'+
-          '<div style="margin-left:auto;font-size:11px;color:#a78bfa99;font-weight:700">'+readMins[1]+' min &#183; 2/5</div>'+
-        '</div>'+
-        // Central topic bubble
-        '<div style="text-align:center;margin-bottom:18px">'+
-          '<div style="display:inline-block;background:linear-gradient(135deg,#7c3aed,#4f46e5);border-radius:50px;padding:10px 20px;font-size:13px;font-weight:800;color:#fff;letter-spacing:.02em;box-shadow:0 4px 20px rgba(139,92,246,.4)">'+mm.topic+'</div>'+
-        '</div>'+
-        // Branches
-        '<div style="display:flex;flex-direction:column;gap:10px">';
     var branchColors=['#3b82f6','#22c55e','#f59e0b','#ec4899','#06b6d4','#8b5cf6'];
+    // Build branches safely to avoid Chrome crash
+    var branchHTML='';
     (mm.branches||[]).forEach(function(br,bi){
       var bc=branchColors[bi%branchColors.length];
-      html+=
-        '<div style="background:'+bc+'11;border:1px solid '+bc+'30;border-radius:13px;padding:12px 14px;position:relative;padding-left:18px">'+
-          '<div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:'+bc+';border-radius:4px 0 0 4px"></div>'+
-          '<div style="font-size:13px;font-weight:800;color:'+bc+';margin-bottom:6px">'+br.label+'</div>'+
-          '<div style="display:flex;flex-wrap:wrap;gap:5px">';
+      var pointsHTML='';
       (br.points||[]).forEach(function(pt){
-        html+='<span style="background:'+bc+'18;border:1px solid '+bc+'28;border-radius:6px;padding:3px 8px;font-size:11px;color:var(--sub)">'+pt+'</span>';
+        pointsHTML+='<span style="background:'+bc+'18;border:1px solid '+bc+'28;border-radius:6px;padding:3px 8px;font-size:11px;color:#ccc;display:inline-block;margin:2px">'+pt+'</span>';
       });
-      html+='</div></div>';
+      branchHTML+='<div style="background:'+bc+'11;border:1px solid '+bc+'30;border-radius:13px;padding:12px 14px 12px 18px;position:relative;margin-bottom:8px">'
+        +'<div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:'+bc+';border-radius:4px 0 0 4px"></div>'
+        +'<div style="font-size:13px;font-weight:800;color:'+bc+';margin-bottom:6px">'+br.label+'</div>'
+        +'<div>'+pointsHTML+'</div>'
+        +'</div>';
     });
-    html+='</div></div>';
+    html+='<div style="background:linear-gradient(135deg,#1e1040,#150d35);border:1.5px solid rgba(139,92,246,.35);border-radius:18px;padding:18px;margin-bottom:14px">'
+      +'<div style="font-size:10px;font-weight:800;letter-spacing:.1em;color:#a78bfa;text-transform:uppercase;margin-bottom:8px">CONNECTIONS</div>'
+      +'<div style="font-size:17px;font-weight:800;color:#fff;margin-bottom:14px">Visual Map</div>'
+      +'<div style="text-align:center;margin-bottom:16px">'
+        +'<div style="display:inline-block;background:linear-gradient(135deg,#7c3aed,#4f46e5);border-radius:50px;padding:10px 20px;font-size:13px;font-weight:800;color:#fff">'+mm.topic+'</div>'
+      +'</div>'
+      +branchHTML
+      +'</div>';
 
   // ── ALL OTHER STEPS: flip flashcards ────────────────────────────────────────
   } else {
