@@ -1111,7 +1111,7 @@ function callAI(sys,msgs,onDone,onErr){
   fetch(PROXY,{
     method:'POST',
     headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({model:'claude-3-5-haiku-20241022',max_tokens:1800,system:sys,messages:msgs})
+    body:JSON.stringify({model:'claude-3-haiku-20240307',max_tokens:1800,system:sys,messages:msgs})
   })
   .then(function(r){
     if(!r.ok){return r.json().catch(function(){return {error:{message:'HTTP '+r.status+' - Check your API key is valid'}};});}
