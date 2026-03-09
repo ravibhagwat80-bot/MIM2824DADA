@@ -211,7 +211,7 @@ img{max-width:100%}
 .ch-num.locked{background:rgba(239,68,68,.05);border-color:rgba(239,68,68,.2);color:var(--red)}
 
 /* ── SUBJECT CARD ── */
-.subj-card{background:var(--card);border:1px solid var(--border);border-radius:15px;padding:18px;cursor:pointer;transition:all .2s;text-align:center}
+.subj-card{background:var(--card);border:1px solid var(--border);border-radius:15px;padding:18px;cursor:pointer;transition:all .2s;text-align:center;color:var(--white)}
 .subj-card:hover{border-color:var(--blue);transform:translateY(-2px);box-shadow:var(--shadow-blue)}
 .subj-card:active{transform:scale(.96)}
 
@@ -1198,7 +1198,7 @@ var BADGE_DEFS=[
   {id:'streak_3',icon:'[fire]',name:'On Fire',desc:'3-day streak',xp:75},
   {id:'streak_7',icon:'[xp]',name:'Lightning',desc:'7-day streak',xp:150},
   {id:'perfect_quiz',icon:'100',name:'Perfect Score',desc:'100% on a quiz',xp:100},
-  {id:'five_chapters',icon:'[books]',name:'Bookworm',desc:'Complete 5 chapters',xp:200},
+  {id:'five_chapters',icon:'📚',name:'Bookworm',desc:'Complete 5 chapters',xp:200},
   {id:'bloom_master',icon:'BM',name:'Bloom Master',desc:'Use Bloom learning on 3 chapters',xp:100},
   {id:'mindful',icon:'ZZ',name:'Mindful Learner',desc:'Complete 3 mindfulness sessions',xp:75},
   {id:'early_bird',icon:'EB',name:'Early Bird',desc:'Study before 8am',xp:50}
@@ -1391,7 +1391,7 @@ function render_home(){
   var todayDone=Object.values(S.progress).filter(function(p){return p.ts&&new Date(p.ts).toDateString()===today;}).length;
   var dp=document.getElementById('daily-prog');if(dp)dp.style.width=Math.min(100,todayDone*100)+'%';
   var dt=document.getElementById('daily-prog-text');if(dt)dt.textContent=todayDone+' / 1 chapters today';
-  var ds=document.getElementById('daily-status');if(ds)ds.textContent=todayDone>=1?'[OK] Done!':'In Progress';
+  var ds=document.getElementById('daily-status');if(ds)ds.textContent=todayDone>=1?'✅ Done!':'In Progress';
   var pb=document.getElementById('home-plan-badge');if(pb)pb.textContent=PLANS[S.plan].name;
   // Recent
   var keys=Object.keys(S.progress).slice(-4).reverse();
@@ -1545,7 +1545,7 @@ function renderDiagQ(qs,idx,answers){
     var score=50;// default mid
     document.getElementById('diag-area').innerHTML=
       '<div class="card mb12" style="background:linear-gradient(135deg,rgba(34,197,94,.08),rgba(6,182,212,.05));border-color:rgba(34,197,94,.2)">'+
-      '<div style="font-size:28px;margin-bottom:8px">[OK]</div>'+
+      '<div style="font-size:28px;margin-bottom:8px">✅</div>'+
       '<div class="h3 mb6">Diagnostic Complete!</div>'+
       '<div class="sm sub lh">I\'ve understood your current level. Your personalised lesson for <strong>'+S.chapter_sel+'</strong> is ready.</div></div>'+
       '<button class="btn btn-primary btn-full" onclick="startChapter('+score+')">Start Learning -></button>';
@@ -1742,29 +1742,25 @@ function renderM5Step(){
 
     // Flip card — FRONT shows big emoji + section name. BACK shows the bite-sized point.
     var cardNum=(cardIdx+1)+' of '+items.length;
-    var words=item.split(' ');
-    var teaser=words.slice(0,7).join(' ')+(words.length>7?'...':'');
+    // Extract single keyword for card front
+    var skipWords=['a','an','the','is','are','was','were','in','on','at','to','of','and','or','that','this','it','has','have','for','with','by','its','their','which','from'];
+    var wds=item.split(' ');
+    var keyword=wds.filter(function(w){return w.length>3&&skipWords.indexOf(w.toLowerCase())<0;})[0]||wds[0]||step.label;
+    keyword=keyword.replace(/[.,;:!?]/g,'');
+    if(keyword.length>14)keyword=keyword.slice(0,14)+'...';
     html+=
       '<div style="perspective:1000px;margin-bottom:14px;cursor:pointer;-webkit-tap-highlight-color:transparent" onclick="m5FlipCard()">'+
         '<div id="m5-card-inner" style="position:relative;transform-style:preserve-3d;transition:transform .5s ease;height:220px;'+(flipped?'transform:rotateY(180deg)':'')+'">'+
 
-          // ── FRONT: icon + short teaser of THIS card's content ──────────
-          // Show first 6-8 words of the actual content as a teaser
-
-
+          // ── FRONT: big icon + single keyword ────────────────────────
           '<div style="position:absolute;top:0;left:0;right:0;bottom:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;'+
             'border-radius:20px;background:linear-gradient(160deg,'+step.color+'28,'+step.color+'0c,#0d1117);'+
             'border:2px solid '+step.color+'45;'+
             'display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 20px;text-align:center">'+
-            // Card counter top left
             '<div style="position:absolute;top:12px;left:14px;background:'+step.color+'20;border-radius:20px;padding:3px 10px;font-size:10px;font-weight:800;color:'+step.color+'">'+cardNum+'</div>'+
-            // Section tag top right
             '<div style="position:absolute;top:12px;right:14px;background:rgba(255,255,255,.06);border-radius:20px;padding:3px 10px;font-size:10px;font-weight:700;color:var(--fog)">'+step.tag+'</div>'+
-            // Big icon
-            '<div style="font-size:44px;margin-bottom:14px">'+step.icon+'</div>'+
-            // Teaser text — unique per card
-            '<div style="font-size:16px;font-weight:800;color:#fff;line-height:1.45;margin-bottom:8px;max-width:260px">'+teaser+'</div>'+
-            // Tap hint
+            '<div style="font-size:56px;margin-bottom:14px">'+step.icon+'</div>'+
+            '<div style="font-size:24px;font-weight:900;color:#fff;letter-spacing:.02em">'+keyword+'</div>'+
             '<div style="position:absolute;bottom:14px;font-size:11px;color:var(--muted)">TAP TO FLIP &#8595;</div>'+
           '</div>'+
 
@@ -2029,8 +2025,8 @@ function answerQ(chosen){
   var fb=document.getElementById('q-fb');
   if(fb)fb.innerHTML=
     '<div class="ai-out mt10" style="border-color:'+(right?'rgba(34,197,94,.3)':'rgba(239,68,68,.3)')+'">'+
-    '<strong style="color:'+(right?'var(--green)':'var(--red)')+'">'+(right?'[OK] Correct!':'[X] Incorrect')+'</strong> '+md(q.exp||'')+'</div>'+
-    '<button class="btn btn-primary btn-full mt10" onclick="nextQ()">'+(_qIdx+1>=_quiz.length?'See Results [trophy]':'Next Question ->')+'</button>';
+    '<strong style="color:'+(right?'var(--green)':'var(--red)')+'">'+(right?'✅ Correct!':'[X] Incorrect')+'</strong> '+md(q.exp||'')+'</div>'+
+    '<button class="btn btn-primary btn-full mt10" onclick="nextQ()">'+(_qIdx+1>=_quiz.length?'See Results 🏆':'Next Question ->')+'</button>';
 }
 
 function nextQ(){
@@ -2042,14 +2038,14 @@ function nextQ(){
 function renderQuizResult(){
   var tot=_quiz.length,pct=Math.round(_qScore/tot*100);
   var col=pct>=80?'var(--green)':pct>=60?'var(--amber)':'var(--red)';
-  var msg=pct>=80?'Excellent! You have mastered this chapter! [trophy]':pct>=60?'Good work! A little more practice needed':'Let us revise - review this chapter again';
+  var msg=pct>=80?'Excellent! You have mastered this chapter! 🏆':pct>=60?'Good work! A little more practice needed':'Let us revise - review this chapter again';
   var clarity=pct>=80?'High Clarity':pct>=60?'Medium Clarity':'Needs Revision';
   clarity=pct>=80?'High Clarity':pct>=60?'Medium Clarity':'Needs Revision';
   // Save progress
   S.progress[pgKey(S.board_sel,S.cls_sel,S.subject_sel,S.chIdx)]={done:pct>=60,score:pct,ts:Date.now()};
   sv();checkStreak();addXP(pct>=80?50:pct>=60?30:15,'Chapter quiz');checkBadges();
   var html='<div class="card center-text">'+
-    '<div style="font-size:48px;margin-bottom:10px">'+(pct>=80?'[trophy]':pct>=60?'[target]':'[books]')+'</div>'+
+    '<div style="font-size:48px;margin-bottom:10px">'+(pct>=80?'🏆':pct>=60?'🎯':'📚')+'</div>'+
     '<div style="font-size:40px;font-weight:800;color:'+col+';margin-bottom:6px">'+pct+'%</div>'+
     '<div class="h3 mb4">'+msg+'</div>'+
     '<div class="sm fog mb8">Session Clarity: <strong style="color:'+col+'">'+clarity+'</strong></div>'+
@@ -2179,7 +2175,7 @@ function mapVideo(){
   var wrap=document.getElementById('video-area');
   if(wrap){
     wrap.insertAdjacentHTML('afterbegin','<div class="video-wrap"><iframe src="https://www.youtube.com/embed/'+id+'" allowfullscreen></iframe></div>');
-    toast('[OK] Video added!');
+    toast('✅ Video added!');
   }
 }
 
@@ -2268,7 +2264,7 @@ function render_profile(){
   var av=document.getElementById('prof-avatar');if(av)av.textContent=S.name?S.name[0].toUpperCase():'?';
   var nm=document.getElementById('prof-name');if(nm)nm.textContent=S.name||'Student';
   var dt=document.getElementById('prof-detail');if(dt)dt.textContent='Class '+S.cls+'  -  '+(S.board||'CBSE').toUpperCase()+'  -  '+S.phone;
-  var gt=document.getElementById('prof-goal-tag');if(gt)gt.textContent=S.goal?'[target] '+S.goal:'';
+  var gt=document.getElementById('prof-goal-tag');if(gt)gt.textContent=S.goal?'🎯 '+S.goal:'';
   var pn=document.getElementById('plan-name');if(pn)pn.textContent=PLANS[S.plan].name+' Plan';
   var pd=document.getElementById('plan-desc');if(pd)pd.textContent=PLANS[S.plan].features.slice(0,2).join('  -  ');
 }
@@ -2307,7 +2303,7 @@ function setPlan(pk){
   // In production, this would trigger Razorpay
   toast('Rs'+PLANS[pk].price+'/mo - Payment via Razorpay coming soon! Contact team@masterinminutes.in');
   // For demo, unlock
-  S.plan=pk;sv();toast('[OK] '+PLANS[pk].name+' plan activated (demo)');hideModal();
+  S.plan=pk;sv();toast('✅ '+PLANS[pk].name+' plan activated (demo)');hideModal();
   render_profile();
 }
 
@@ -2374,7 +2370,7 @@ function render_teacher_progress(){
       '<div class="prog"><div class="prog-fill" style="width:'+st.avg+'%;background:'+col+'"></div></div>'+
       '<div class="row gap8 mt8">'+
       '<button class="btn btn-xs btn-secondary f1" onclick="toast(\'Student report generated\')">A Report</button>'+
-      '<button class="btn btn-xs btn-green f1" onclick="toast(\'Chapter unlocked for '+st.name+'!\')">[unlock] Unlock Chapter</button>'+
+      '<button class="btn btn-xs btn-green f1" onclick="toast(\'Chapter unlocked for '+st.name+'!\')">🔓 Unlock Chapter</button>'+
       '</div></div>';
   });
   var sl=document.getElementById('t-student-list');if(sl)sl.innerHTML=html;
