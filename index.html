@@ -1759,7 +1759,33 @@ function renderM5Step(){
             'display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 20px;text-align:center">'+
             '<div style="position:absolute;top:12px;left:14px;background:'+step.color+'20;border-radius:20px;padding:3px 10px;font-size:10px;font-weight:800;color:'+step.color+'">'+cardNum+'</div>'+
             '<div style="position:absolute;top:12px;right:14px;background:rgba(255,255,255,.06);border-radius:20px;padding:3px 10px;font-size:10px;font-weight:700;color:var(--fog)">'+step.tag+'</div>'+
-            '<div style="font-size:56px;margin-bottom:14px">'+step.icon+'</div>'+
+            // Pick emoji based on card content keywords
+    var emojiMap=[
+      [['king','queen','emperor','ruler','throne','dynasty','reign'],'👑'],
+      [['war','battle','fight','army','soldier','weapon','revolt','revolution'],'⚔️'],
+      [['money','bank','credit','loan','currency','economy','trade','market'],'💰'],
+      [['science','experiment','chemical','reaction','element','atom','molecule'],'🔬'],
+      [['plant','photosynthesis','cell','biology','organism','species'],'🌱'],
+      [['force','motion','energy','power','work','gravity','velocity'],'⚡'],
+      [['light','wave','sound','electric','magnetic','heat','temperature'],'🌊'],
+      [['history','ancient','civilization','empire','culture','society'],'🏛️'],
+      [['democracy','government','constitution','rights','freedom','law','parliament'],'🏛️'],
+      [['map','geography','mountain','river','climate','region','country'],'🗺️'],
+      [['number','equation','formula','calculate','algebra','geometry','theorem'],'📐'],
+      [['poem','story','language','grammar','literature','author','character'],'📖'],
+      [['computer','technology','digital','data','internet','software'],'💻'],
+      [['environment','pollution','forest','water','earth','natural'],'🌍'],
+      [['food','nutrition','vitamin','protein','diet','health','body'],'🥗'],
+      [['nationalism','nation','movement','independence','freedom','protest'],'🚩'],
+      [['trade','export','import','agriculture','industry','production'],'🏭'],
+    ];
+    var itemLower=item.toLowerCase();
+    var cardEmoji=step.icon;
+    for(var ei=0;ei<emojiMap.length;ei++){
+      var found=emojiMap[ei][0].some(function(kw){return itemLower.indexOf(kw)>=0;});
+      if(found){cardEmoji=emojiMap[ei][1];break;}
+    }
+    '<div style="font-size:56px;margin-bottom:14px">'+cardEmoji+'</div>'+
             '<div style="font-size:24px;font-weight:900;color:#fff;letter-spacing:.02em">'+keyword+'</div>'+
             '<div style="position:absolute;bottom:14px;font-size:11px;color:var(--muted)">TAP TO FLIP &#8595;</div>'+
           '</div>'+
