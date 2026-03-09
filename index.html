@@ -1161,7 +1161,7 @@ function showErr(id,msg){
     +'<div style="font-size:13px;color:var(--sub);margin-bottom:14px;line-height:1.6">'+msg+'</div>'
     +'<div style="display:flex;gap:8px">'
     +'<button class="btn btn-secondary btn-sm" onclick="retryLast()">Try Again</button>'
-    +'<button class="btn btn-secondary btn-sm" onclick="go(\'apikey\')">Check API Key</button>'
+    +''
     +'</div></div>';
 }
 function showModal(html){document.getElementById('modal-content').innerHTML=html;document.getElementById('modal-overlay').classList.add('on');}
@@ -1961,16 +1961,35 @@ function genQuiz(){
   ask(sys,msg,
     function(txt){
       try{
+        // Robust JSON extraction
         var clean=txt.replace(/```json\n?/g,'').replace(/```\n?/g,'').trim();
-        var m=clean.match(/\[[\s\S]*?\]/);
-        _quiz=JSON.parse(m[0]);
+        // Try direct parse first
+        var parsed=null;
+        try{parsed=JSON.parse(clean);}catch(e1){
+          // Try extracting array
+          var m=clean.match(/\[[\s\S]*\]/);
+          if(m){try{parsed=JSON.parse(m[0]);}catch(e2){}}
+        }
+        if(!parsed||!Array.isArray(parsed)||parsed.length===0){
+          throw new Error('Invalid quiz format');
+        }
+        _quiz=parsed;
         _qIdx=0;_qScore=0;_qDone=false;
         renderQuizQ();
-      }catch(e){showErr('quiz-area','Could not load quiz. <button class="btn btn-secondary btn-xs" onclick="genQuiz()" style="margin-left:8px">Retry</button>');}
+      }catch(e){
+        // Retry once automatically
+        if(!_quizRetried){
+          _quizRetried=true;
+          setTimeout(genQuiz,1000);
+        } else {
+          showErr('quiz-area','Could not load quiz. <button class="btn btn-secondary btn-xs" onclick="_quizRetried=false;genQuiz()" style="margin-left:8px">Retry</button>');
+        }
+      }
     },
-    function(err){showErr('quiz-area',err);}
+    function(err){showErr('quiz-area','Quiz error: '+err);}
   );
 }
+var _quizRetried=false;
 
 function renderQuizQ(){
   if(_qDone){renderQuizResult();return;}
